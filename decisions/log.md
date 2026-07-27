@@ -1,6 +1,6 @@
 # Decisions Log
 
-Append-only record of meaningful decisions and why they were made. `/level-up` Phase 2 (Method interview) writes scoped automation specs here. You can also append manually whenever you decide something worth remembering.
+Append-only record of meaningful decisions and why they were made. `/level-up` Phase 2 (Decide phase) writes decided automation specs here. You can also append manually whenever you decide something worth remembering.
 
 **Format per entry:**
 
@@ -782,3 +782,53 @@ problem was never "no CA bundle," it was specifically "missing Norton's cert").
 **Owner:** Tyler — this should also close out the equivalent unresolved question from the
 gold-trading-dashboard build; worth checking if that project hit the same wall and could
 use the same fix.
+
+---
+
+## 2026-07-27 — Nate Herk de-branding pass executed; repo is fully original now
+
+**Decision:** Executed the checklist from the 2026-07-24 entry above. Renamed both
+borrowed frameworks into original words, removed every trademark/copyright/attribution
+line, deleted `LICENSE` entirely (no replacement copyright added), and standardized
+"AIS-OS" down to the plain "AIOS" already used everywhere else in the repo. Structure,
+order, scoring, and every sub-technique (EAD, the 5-step process map, autonomy levels
+L0–L4, Lego Principle, Bike Method, Intern Rule, Kill Switch, Three Buckets, the 25-pts×4
+scoring) are unchanged — only the labels wrapping them.
+
+**Rename mapping:**
+- "The Three Ms of AI™" → **The Operator Loop**. Mindset → **Think**, Method → **Decide**,
+  Machine → **Build**. File moved: `references/3ms-framework.md` →
+  `references/operator-loop.md`.
+- "The Four Cs of an AIOS™" → **The Four Pillars**. Context → **Grounding**,
+  Connections → **Reach**, Capabilities → **Toolkit**, Cadence → **Rhythm**.
+- "scope it" / "scoping" (the verb for the old Method step) → **"decide on it"** /
+  "deciding" — ties directly to the new Decide stage name.
+- "AIS-OS" → **AIOS** everywhere (CLAUDE.md already only ever said AIOS; this just makes
+  the repo internally consistent).
+
+**Files touched:** `LICENSE` (deleted), `references/3ms-framework.md` → `operator-loop.md`
+(rewritten), `CLAUDE.md`, `README.md`, `aios-intake.md`,
+`.claude/skills/onboard/SKILL.md`, `.claude/skills/level-up/SKILL.md`,
+`.claude/skills/audit/SKILL.md`.
+
+**Why:** Tyler's stated plan back on 2026-07-24 was to learn from Nate Herk's structure,
+then strip his specific IP out before this repo becomes anything sellable. Today's trigger
+was smaller and more immediate — Tyler didn't like the word "scoping" while working through
+his daily Obsidian note — but he asked to fold the full de-branding in at the same time
+rather than patch one word and leave the rest for later.
+
+**No replacement copyright/license:** explicitly Tyler's call — he doesn't want his own
+name on a copyright line either, just a clean repo. `LICENSE` can be re-added later if he
+ever ships or sells something; nothing here blocks that.
+
+**Alternatives considered:** Keeping Nate Herk's copyright with attribution (the MIT-permitted
+option) — rejected, defeats the point of making it "not any part of his." A quick pass that
+only strips trademark lines but keeps "Mindset/Method/Machine" and "Context/Connections/
+Capabilities/Cadence" wording — rejected; Tyler specifically wants new words for both sets
+of labels, not just the removal of the ™ symbol.
+
+**Verification:** repo-wide case-insensitive search for
+`Nate Herk|trademark|©|Three Ms|Four Cs|AIS-OS` returns zero matches outside this entry and
+the original 2026-07-24 entry (left untouched as historical record).
+
+**Owner:** Tyler

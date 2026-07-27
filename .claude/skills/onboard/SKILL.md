@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: Use on Day 1 of an AIS-OS install, when someone says "set me up", "onboard me", "let's get started", "fill in my AIOS", or has just cloned the kit. Combined wizard — runs the 7-question intake AND scaffolds the Day-1 file set at the end. Idempotent — re-run any time after editing aios-intake.md.
+description: Use on Day 1 of an AIOS install, when someone says "set me up", "onboard me", "let's get started", "fill in my AIOS", or has just cloned the kit. Combined wizard — runs the 7-question intake AND scaffolds the Day-1 file set at the end. Idempotent — re-run any time after editing aios-intake.md.
 ---
 
 ## What this skill does
@@ -83,7 +83,7 @@ When the user runs the closing prompt ("what should I focus on this week?"), res
 - Each bullet ties back to a stated 90-day priority from Q3
 - Final line: *"If I had to pick one thing for Monday, it'd be [X], because [reason from priorities]. Want me to draft the first email? And — where could the Default Shift apply here? To what extent could AI be leveraged on this task?"*
 
-The Default Shift question seeds the Mindset framework before `/level-up` formally introduces it on Day 14.
+The Default Shift question seeds the Think framework before `/level-up` formally introduces it on Day 14.
 
 ## Critical implementation rules
 
@@ -93,7 +93,7 @@ The Default Shift question seeds the Mindset framework before `/level-up` formal
 4. **Idempotent.** Re-running with an edited intake refreshes context files; backs up originals to `archives/intake-{ts}/`. Skips questions already answered unless the user wants to revise.
 5. **Closing screen is three lines.** Not a menu.
 6. **No extra skills generated.** Don't scaffold `/today`, `/draft`, `/connect`, etc. The kit ships 3 skills; the user authors more via `/level-up`.
-7. **Read-only on `references/3ms-framework.md`.** It already ships in the kit. Don't overwrite.
+7. **Read-only on `references/operator-loop.md`.** It already ships in the kit. Don't overwrite.
 8. **No `.env` writes.** Don't ask for API keys on Day 1. Connections come Day 2.
 
 ## Verification (for the implementer)
@@ -102,4 +102,4 @@ The Default Shift question seeds the Mindset framework before `/level-up` formal
 - Idempotency: re-run `/onboard` with one Q3 priority changed. Expected: only `context/priorities.md` and `CLAUDE.md`'s priority section update; backup created in `archives/intake-{ts}/`.
 - Voice rejection: type a sample mid-chat. Expected: skill refuses, asks for paste.
 
-> *Adapted from The Three Ms of AI™ © 2026 Nate Herk. The Mindset language used in the closing screen comes from `references/3ms-framework.md`.*
+> *The Think language used in the closing screen comes from `references/operator-loop.md`.*

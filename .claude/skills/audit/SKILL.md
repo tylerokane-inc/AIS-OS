@@ -1,11 +1,11 @@
 ---
 name: audit
-description: Use when someone asks for an AIOS audit, asks to score their setup against the Four Cs, or says "is my AIOS working" / "audit my setup" / "find gaps in my AIOS". Produces a Four-Cs scoreboard with top-3 fixes ranked by leverage.
+description: Use when someone asks for an AIOS audit, asks to score their setup against the Four Pillars, or says "is my AIOS working" / "audit my setup" / "find gaps in my AIOS". Produces a Four Pillars scoreboard with top-3 fixes ranked by leverage.
 ---
 
 ## What this skill does
 
-Runs the **Four Cs Audit** on the current Claude Code project. Reads (never writes) the project's operating manual, memory, skills, agents, MCPs, decisions, and references. Scores each of the Four Cs out of 25. Surfaces strengths and the top 3 leverage-weighted gaps with concrete next-step commands.
+Runs the **Four Pillars Audit** on the current Claude Code project. Reads (never writes) the project's operating manual, memory, skills, agents, MCPs, decisions, and references. Scores each of the Four Pillars out of 25. Surfaces strengths and the top 3 leverage-weighted gaps with concrete next-step commands.
 
 **Scope is structural — "is the AIOS built right?"** It is NOT a capability planner. Capability gaps ("you could build a daily brief if you connected calendar") belong to `/level-up`. The audit answers: are the files, folders, registries, and connections in good shape?
 
@@ -16,14 +16,14 @@ First run is the baseline. Re-run weekly to watch the score climb. That's the co
 - **Date:** !`date +%Y-%m-%d`
 - **Project root:** the current working directory
 
-## The Four Cs (scored 25 each = 100 total)
+## The Four Pillars (scored 25 each = 100 total)
 
-| Layer | Test |
+| Pillar | Test |
 |---|---|
-| **Context** | Knows the business — identity, team, voice, decisions, references |
-| **Connections** | Reaches the user's stuff — MCPs, integrations, data sources |
-| **Capabilities** | Knows how to do work — skills + agents |
-| **Cadence** | Runs without being asked — schedules, hooks, recurring rituals |
+| **Grounding** | Knows the business — identity, team, voice, decisions, references |
+| **Reach** | Reaches the user's stuff — MCPs, integrations, data sources |
+| **Toolkit** | Knows how to do work — skills + agents |
+| **Rhythm** | Runs without being asked — schedules, hooks, recurring rituals |
 
 ## Execution
 
@@ -50,9 +50,9 @@ The audit looks for **patterns and intent**, not exact paths. File names vary. U
 
 Don't penalize for non-canonical names if equivalent intent is captured elsewhere.
 
-### Step 2: Score each C (25 points each)
+### Step 2: Score each pillar (25 points each)
 
-#### Context (25 pts)
+#### Grounding (25 pts)
 
 | Criterion | Points | How to detect |
 |---|---|---|
@@ -62,7 +62,7 @@ Don't penalize for non-canonical names if equivalent intent is captured elsewher
 | Reference docs exist | 5 | `references/`, `docs/`, or `sops/` has ≥1 file |
 | Decisions captured | 5 | `decisions/log.md` or equivalent has ≥1 entry |
 
-#### Connections (25 pts) — domain-aware, mechanism-agnostic
+#### Reach (25 pts) — domain-aware, mechanism-agnostic
 
 A "reachable" connection counts via ANY mechanism: MCP, script, export pipeline, or `.env` key + `references/{tool}-api.md`. The kit is API-first; the audit doesn't prefer MCPs.
 
@@ -88,15 +88,15 @@ A "reachable" connection counts via ANY mechanism: MCP, script, export pipeline,
 | Documentation in `connections.md` | 3 | 0 if missing; 1 sparse; 2 most; 3 covers all reachable. |
 | Read-AND-write balance | 2 | At least one connection can WRITE (send email, post update, etc.). 0 if all read-only — the AIOS is a viewer not an OS. |
 
-#### Capabilities (25 pts)
+#### Toolkit (25 pts)
 
 | Criterion | Points | How to detect |
 |---|---|---|
 | 3+ skills installed | 10 | Count `.claude/skills/*/SKILL.md` |
-| 1+ user-built skill | 10 | Skill names not in: `onboard`, `audit`, `level-up`, `skill-creator`, `skill-builder`, `decision`, `connect`, `connect-check`, `memory-prune`, `scaffold-skill`, `scaffold-agent`, `draft`, `standup` (canonical AIS-OS + Anthropic shipped skills) |
+| 1+ user-built skill | 10 | Skill names not in: `onboard`, `audit`, `level-up`, `skill-creator`, `skill-builder`, `decision`, `connect`, `connect-check`, `memory-prune`, `scaffold-skill`, `scaffold-agent`, `draft`, `standup` (canonical AIOS + Anthropic shipped skills) |
 | 1+ agent defined | 5 | Count `.claude/agents/*.md` ≥ 1 |
 
-#### Cadence (25 pts)
+#### Rhythm (25 pts)
 
 | Criterion | Points | How to detect |
 |---|---|---|
@@ -111,9 +111,9 @@ For each criterion that lost points: leverage = (points lost) × (impact multipl
 **Impact multipliers:**
 - 0 tier-1 domains reachable: **4x** (AIOS is blind to the business)
 - Operating manual missing or thin: **3x** (foundation)
-- ≤2 tier-1 domains reachable: **3x** (Connections is the gateway to live data)
-- 0 skills: **2x** (no Capabilities = no AIOS)
-- No recurring trigger: **2x** (no Cadence = no autonomy)
+- ≤2 tier-1 domains reachable: **3x** (Reach is the gateway to live data)
+- 0 skills: **2x** (no Toolkit = no AIOS)
+- No recurring trigger: **2x** (no Rhythm = no autonomy)
 - All connections read-only: **2x** (viewer, not an OS)
 - 0 reference guides for connected tools: **1.5x** (every future skill re-researches the same APIs)
 - No decisions log: **1.5x**
@@ -142,10 +142,10 @@ Stage thresholds:
 
 ## Scoreboard
 
-Context        {bar}  {n}/25  {label}
-Connections    {bar}  {n}/25  {label}
-Capabilities   {bar}  {n}/25  {label}
-Cadence        {bar}  {n}/25  {label}
+Grounding      {bar}  {n}/25  {label}
+Reach          {bar}  {n}/25  {label}
+Toolkit        {bar}  {n}/25  {label}
+Rhythm         {bar}  {n}/25  {label}
 
 (bar = ## per 5pts; label = "Strong" ≥20, "Solid" 15-19, "Thin" 8-14, "Missing" <8)
 
@@ -177,4 +177,4 @@ After printing, ask: "Save this audit to `audits/audit-{date}.md` so you can tra
 - **Be honest, not generous.** A 95/100 is a flex. Most setups land 40-70.
 - **Don't suggest skills that don't exist.** Point at what's actually available.
 - **Speed matters.** Report in under 60 seconds wall-clock. Read targeted files, count skill folders without reading each fully (frontmatter only).
-- **Cadence detection is fuzzy.** Infer from skill names if hooks/cron data isn't cleanly available.
+- **Rhythm detection is fuzzy.** Infer from skill names if hooks/cron data isn't cleanly available.

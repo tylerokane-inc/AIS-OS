@@ -1,7 +1,4 @@
-# The Three Ms of AI™ — Mindset, Method, Machine
-
-> *Adapted from The Three Ms of AI™. © 2026 Nate Herk. All rights reserved.*
-> *The Three Ms of AI™ is a trademark of Nate Herk.*
+# The Operator Loop — Think, Decide, Build
 
 > *"The best automation is the one you barely notice. Start by eliminating what doesn't need to exist, then automate what's left with the least amount of AI possible."*
 
@@ -13,13 +10,13 @@
 
 This framework is the operator brain you'll use every time you run `/level-up`. Three layers, each one builds on the last. Read it once, refer back as needed.
 
-Here's the thing most people get wrong: they think AI automation is about tools. It's not. Tools change every six months. The platform you're using today might not exist next year. What doesn't change is how you THINK about automation, how you DECIDE what to automate, and how you BUILD and OPERATE the thing once it's running. That's what The Three Ms of AI™ gives you. A way to think that works regardless of platform, model, or hype cycle.
+Here's the thing most people get wrong: they think AI automation is about tools. It's not. Tools change every six months. The platform you're using today might not exist next year. What doesn't change is how you THINK about automation, how you DECIDE what to automate, and how you BUILD and OPERATE the thing once it's running. That's what the Operator Loop gives you. A way to think that works regardless of platform, model, or hype cycle.
 
 This framework is for everyone. Business owners hearing about AI for the first time. Engineers exploring automation. Consultants who need a methodology they can hand to a client. It scales.
 
 ---
 
-## Layer 1 — MINDSET (How to Think)
+## Layer 1 — THINK (How to Think)
 
 Before you touch a single tool, you need to rewire how you approach work. The way you think about tasks determines whether you'll spot automation opportunities or walk past them every day.
 
@@ -61,9 +58,9 @@ Productivity dip at the start: ~20% less output for the first week or two. New w
 
 ---
 
-## Layer 2 — METHOD (How to Decide)
+## Layer 2 — DECIDE (How to Decide)
 
-Mindset tells you how to think. Method tells you what to do with that thinking. The operational core — turning "I should probably automate something" into "here's exactly what I'm building and why."
+Think tells you how to think. Decide tells you what to do with that thinking. The operational core — turning "I should probably automate something" into "here's exactly what I'm building and why."
 
 ### 1. Find the Constraint
 
@@ -138,9 +135,9 @@ If your automation doesn't improve a metric in one of the three buckets, stop. *
 
 ---
 
-## Layer 3 — MACHINE (How to Build and Operate)
+## Layer 3 — BUILD (How to Build and Operate)
 
-You've got the thinking (Mindset) and the decisions (Method). Now you build and run the thing. Two halves: BUILD and OPERATE.
+You've got the thinking (Think) and the decisions (Decide). Now you build and run the thing. Two halves: BUILD and OPERATE.
 
 ### BUILD
 
@@ -218,7 +215,7 @@ Three principles that sit above everything else. When in doubt, return to these.
 
 ## Branch Frameworks (future hooks)
 
-The 3Ms is the mothership. Specific topics go deeper in dedicated frameworks. Most aren't built into this kit yet. They'll grow into `references/` over time:
+The Operator Loop is the mothership. Specific topics go deeper in dedicated frameworks. Most aren't built into this kit yet. They'll grow into `references/` over time:
 
 - **The Data Retrieval Hierarchy** — Filters, SQL, Full Context, RAG: when to use which
 - **The Integration Ladder** — API, CLI, Browser Automation, Scraping: hierarchy of reliability
@@ -228,9 +225,4 @@ The 3Ms is the mothership. Specific topics go deeper in dedicated frameworks. Mo
 - **The Discovery Playbook** — How to run discovery with a client or team before building
 - **The Security and Permissions Playbook** — Access control, audit trails, risk management
 
-Each plugs into the 3Ms at specific points. Start here, branch out as you need depth.
-
----
-
-> *Adapted from The Three Ms of AI™. © 2026 Nate Herk. All rights reserved.*
-> *Full breakdown with diagrams and examples: [insert link to YouTube companion video / public-facing page when published].*
+Each plugs into the Operator Loop at specific points. Start here, branch out as you need depth.
