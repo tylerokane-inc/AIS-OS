@@ -1,9 +1,9 @@
 ---
-name: board-of-advisors
-description: Use this skill whenever Tyler is stuck, facing a real decision, wants a second opinion, or wants creative direction — on career, money, business, or creative work. Trigger on things like "what should I do about...", "help me think through...", "not sure if I should...", "should I take this deal/job/direction," "give me a gut check on...", or any request for advice, feedback, or guidance on a real choice — even if he never says "board" or "advisors." This convenes Tyler's personal board of five real, research-vetted advisors, has each weigh in independently in their own voice, and returns one synthesized verdict plus the reasoning underneath. Prefer this skill over generic advice any time the question is a real decision or creative-direction problem, not a simple factual lookup.
+name: ask-the-board
+description: Use this skill whenever Tyler says "ask the board" — that phrase always triggers it directly — or whenever he's stuck, facing a real decision, wants a second opinion, or wants creative direction on career, money, business, or creative work. Also trigger on things like "what should I do about...", "help me think through...", "not sure if I should...", "should I take this deal/job/direction," "give me a gut check on...", or any request for advice, feedback, or guidance on a real choice — even if he never says "board" or "advisors." This convenes Tyler's personal board of five real, research-vetted advisors, has each weigh in independently in their own voice, and returns one synthesized verdict plus the reasoning underneath. Prefer this skill over generic advice any time the question is a real decision or creative-direction problem, not a simple factual lookup.
 ---
 
-# Board of Advisors
+# Ask the Board
 
 Tyler built this board because spinning alone on a big decision is worse than getting five real, different-minded takes and a synthesized verdict. The whole value is in the disagreement — five polite versions of the same answer would be useless. Protect that.
 

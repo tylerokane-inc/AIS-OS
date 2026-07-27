@@ -1,4 +1,4 @@
-# Board of Advisors — Portable Copy
+# Ask the Board — Portable Copy
 
 This folder is everything the skill needs. Nothing lives anywhere else. Copy this whole folder and it works.
 
