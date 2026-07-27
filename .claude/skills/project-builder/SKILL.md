@@ -38,6 +38,15 @@ this skill has nothing to execute without one.
    a default step until something is deliberately set as a real convention.)
 3. **Isolate genuinely open decisions** — things the spec explicitly left unresolved or
    couldn't have anticipated (not questions the spec already answered).
+3.4. **New connections default to direct API calls, not MCP** (token-cost decision — an
+   MCP server's tool schemas load into every conversation's context whether used or not; a
+   direct API call doesn't). Set up: real keys in the repo-root `.env` (or skill-local only
+   if the skill is meant to be a standalone/portable export) and a
+   `references/<provider>-api.md` file at the repo root matching `clickup-api.md`'s
+   structure. Recommend MCP explicitly instead when a service's auth is genuinely
+   complex/stateful enough that hand-rolled code would likely be fragile, or when no usable
+   REST API/SDK exists at all — see `project-planner`'s matching rule and the 2026-07-23/
+   2026-07-27 decision log entries for precedent (`gws-cli`, ClickUp, Exa/Firecrawl).
 3.5. **Re-verify any third-party API's free-tier access before wiring code to it**, even if
    the spec already named a provider — pricing pages change, and "free tier" marketing
    often gates the exact endpoint needed behind a paid plan (this bit the gold-trading-
@@ -75,11 +84,23 @@ follow `skill-builder`'s Build Phase conventions (frontmatter, structure, `CLAUD
   decision. Wait for a go-ahead before the next component. Don't flood this with more than
   a couple ideas per phase; Tyler reads them and picks what's worth folding in.
 - **Simpler:** build straight through, one brief update per component.
+- **Keep the main build thread clean.** If a tangential question or side-research comes up
+  mid-build (a random "how does X work" or a research tangent that isn't the next build
+  step), spin off a subagent (the `Agent` tool) to chase it down instead of burning the
+  main thread's context on it — it works its own blank context window and only its final
+  answer comes back to Tyler. Same for condensing/summarizing context. This is something
+  the builder does on its own; it's not a step Tyler has to manage. Matches the AIOS's own
+  token-efficiency priority.
 
 ## Phase 4 — Wire up
 
 1. **Document each new artifact** wherever it needs to be indexed — `CLAUDE.md` for a new
-   skill, a README for a new script/app, etc.
+   skill, a README for a new script/app, etc. For a standalone (non-skill) build — an app,
+   dashboard, or script living in its own Desktop folder — also write a short, pruned
+   `CLAUDE.md` at the project root alongside the README: just what a future Claude Code
+   session opened in that folder needs to know (key context, conventions, gotchas). The
+   README is for a human/GitHub reader; this is for the next Claude session. Keep it tight —
+   nothing useless or overly restrictive.
 2. **Package the project's own docs to fit what this project actually needs** — don't
    default to a fixed multi-file shape just because one exists elsewhere in the vault (see
    Phase 1's no-template-hunting rule). For most builds, a short overview/index plus the
@@ -145,15 +166,23 @@ match, an ambiguous case) rather than only the happy path.
   real error server-side only; show a short, generic, safe message to the user. (Shipped
   this bug for real during the gold-trading-dashboard build, 2026-07-26 — caught and fixed
   it, but it should never happen in the first place.)
-- **The build sandbox's own shell tools are not the user's real machine for anything
-  network- or process-related** — outbound HTTPS calls from Bash/PowerShell tool calls can
-  fail here even with valid keys and a working user machine (this is a sandbox network
-  limitation, not evidence of a bad key, bad cert, or antivirus interference on the user's
-  end — don't diagnose the user's machine based on it). The same applies to `netstat`/process
-  state: a PID or listening port seen through these tools may not reflect what's actually
-  running on the user's real machine. When something needs live verification (a real API
-  call, a real running server), say so plainly and have the user run/check it themselves
-  rather than guessing from sandboxed tool output.
+- **An SSL/certificate error from a Bash/PowerShell tool call is usually a real, fixable
+  local issue — diagnose it, don't wave it off as "the sandbox isn't the real machine."**
+  That was this repo's working assumption until 2026-07-27, and it was wrong: a recurring
+  `SSLCertVerificationError` (first seen, unresolved, on the gold-trading-dashboard build)
+  turned out to be Norton Antivirus's HTTPS-scanning feature re-signing traffic with its
+  own certificate — genuinely diagnosable by checking DNS resolution (rules out routing),
+  then inspecting the actual presented certificate's issuer (`openssl s_client -connect
+  host:443 | openssl x509 -noout -issuer`). Fixed for real with the `truststore` package
+  (see `decisions/log.md` 2026-07-27) — not by disabling verification. Bash/PowerShell
+  tool calls DO run on the user's real machine (this is how every file in this repo gets
+  created/edited) — treat a network failure as real and diagnosable first. Only fall back
+  to "have the user verify directly" if the actual cause genuinely can't be determined
+  from here, not as the default first move.
+- **`netstat`/process state seen through these tools may not reflect what's running on the
+  user's actual machine** in every case — if a PID/port check seems to contradict what the
+  user reports seeing, say so and ask them to check directly, rather than trusting the tool
+  output as more authoritative than their own eyes.
 
 ## What this skill explicitly does NOT do
 

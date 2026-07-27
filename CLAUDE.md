@@ -20,6 +20,7 @@ Read `references/3ms-framework.md` once. It's how Tyler thinks about AI work. Mi
 - `/skill-builder` — Use when creating, optimizing, or auditing a Claude Code skill (in this repo or elsewhere). Runs a discovery interview for new skills, or a frontmatter/content/integration/quality checklist for existing ones.
 - `obsidian-organizer` — Files and organizes Tyler's Obsidian daily note. Trigger on "go file today's notes," "go organize today's notes," "what should I work on today," or "check today's notes." Reads/edits the vault directly (`C:\Users\User\Documents\Obsidian_Vault`) — no API. Nightly 11pm auto-run is spec'd but deferred; manual-only for now.
 - `obsidian-context` — Pulls matching prior context from the Obsidian vault into any AIOS conversation, on demand. Trigger on "use Obsidian to find this," "pull any valid info we have from Obsidian to help with this," or "check my notes for X." Read-only; strict no-weak-match rule.
+- `web-scraping` — Gives Claude (and subagents) real web access Claude's built-in tools can't: semantic search (Exa, fixes keyword-only `WebSearch`) and JS-rendering page fetch (Firecrawl, fixes `WebFetch`'s blank results on modern pages). Mostly fires automatically during research, not on a fixed trigger phrase — foundational utility other skills lean on. Never dumps raw pages; always synthesizes with sources cited.
 
 ## Where things live
 
@@ -54,9 +55,13 @@ This quarter's priorities (`context/priorities.md`):
 
 Side projects Tyler's floated (not Day-1 scope, surface these if `/level-up`
 comes looking for automation candidates): multi-terminal workflow, a
-"board of advisors" multi-persona critique skill, a trading dashboard, a
-fitness-coach app, a nightly speaking-practice review pipeline (record →
-Fireflies transcript → next-day review dashboard).
+trading dashboard, a fitness-coach app, a nightly speaking-practice review
+pipeline (record → Fireflies transcript → next-day review dashboard), a
+daily AI/trading news brief (would reuse the `web-scraping` skill's Exa/
+Firecrawl connections).
+
+Shipped from this list already: "board of advisors" → `ask-the-board` skill;
+web-scraping → `web-scraping` skill (both 2026-07-27).
 
 ## Voice
 
@@ -111,6 +116,10 @@ Run `/audit` to check freshness as connections evolve.
   point me at `references/repo-map.md` (or `EXPANSIONS.md` for the deeper
   version). The goal is for me to predict the structure myself over time,
   not just trust that you remember it.
+- **Front-load a complete, dependency-ordered plan on any multi-step build**
+  (new skill, new project, migration) and drive it through to done — don't
+  stop to check in at every single step. Ask only when something is a
+  genuine decision only I can make, not as a progress checkpoint.
 - **Full step-by-step, every time, for anything procedural.** When walking me
   through a task on my actual computer (opening a terminal, running a
   command, clicking through a settings screen), give the complete sequence —

@@ -1,16 +1,17 @@
 ---
 name: obsidian-organizer
-description: Use when Tyler wants today's raw Obsidian daily note filed and organized, or wants to know his top priority for the day. Trigger on "go file today's notes," "go organize today's notes," "what should I work on today," or "check today's notes." Owns everything that touches today's note in Tyler's Obsidian vault.
+description: Use when Tyler wants today's raw Obsidian daily note filed and organized, wants to know his top priority for the day, or wants to actually see/work through his daily note with Claude. Trigger on "go file today's notes," "go organize today's notes," "what should I work on today," "check today's notes," "show me my daily notes," "pull up my daily notes," or "build a plan off my daily notes." Owns everything that touches today's note in Tyler's Obsidian vault.
 ---
 
 # Obsidian Organizer
 
 Owns everything that touches *today's* note and the general **`01-Inbox\`** capture zone in
-Tyler's Obsidian vault (`C:\Users\User\Documents\Obsidian_Vault`). Two operations: a
+Tyler's Obsidian vault (`C:\Users\User\Documents\Obsidian_Vault`). Three operations: a
 **filing pass** that turns raw capture — today's journal note, plus anything dropped in
-`01-Inbox\` — into an organized, cross-linked knowledge base, and a **priority check** that
-reads today's note to surface one clear top priority. Finding *prior* context for something
-else entirely is `obsidian-context`'s job, not this one.
+`01-Inbox\` — into an organized, cross-linked knowledge base; a **priority check** that
+reads today's note to surface one clear top priority fast; and a **working session** that
+puts the whole raw note in front of Tyler and works through it with him line by line.
+Finding *prior* context for something else entirely is `obsidian-context`'s job, not this one.
 
 `01-Inbox\` is the general front door — anything new that isn't today's journal writing
 (a quick note, a screenshot, a PDF, a random file) gets dropped there any time, and the next
@@ -62,6 +63,27 @@ Trigger: "what should I work on today" / "check today's notes."
    rule (see that skill) — a genuine match only, never a loose keyword grab.
 3. Surface one clear top priority for the day, plus anything flagged from a prior filing pass
    that still needs Tyler's judgment call.
+
+## Operation 3 — Working session
+
+Trigger: "show me my daily notes" / "pull up my daily notes" / "build a plan off my daily
+notes" / any variant where Tyler wants to actually see and work through the note with
+Claude, not just get a quick top-pick.
+
+1. Read today's file in full (raw, unedited — path resolved from `daily-notes.json`).
+2. **Show Tyler the entire raw content back**, cleanly organized/readable — never
+   condensed, summarized away, or trimmed to "the important parts." He wants everything in
+   front of him, not Claude's filtered take on it.
+3. Flag anything unclear or underspecified rather than guessing at what it means — ask.
+4. Work through it together, section by section, in-depth — what each item means, how it
+   connects to other things he's building or has floated before (may check `Index.md` /
+   related `02-Projects` notes using `obsidian-context`'s relevance rule — genuine match
+   only).
+5. Help him land on the highest-leverage thing to build or focus on today — a discussion
+   with Tyler, not an automatic pick like Operation 2's priority check.
+
+This never edits the note itself — that's still Operation 1's job, and only when Tyler
+separately asks for a filing pass.
 
 ## Nightly auto-run — deferred
 

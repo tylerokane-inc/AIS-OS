@@ -571,3 +571,214 @@ actually needed — just edit, commit, push to the existing branch.
 `master` was correct since there was no divergence to reconcile.
 
 **Owner:** Tyler
+
+---
+
+## 2026-07-27 — Python now installed; PowerShell-only default for scripts lifted
+
+**Decision:** Tyler installed a real Python 3.12.10 (with working pip) on this machine
+2026-07-26, replacing the old Windows Store stub referenced in the 2026-07-23 `scripts/`
+entry above. Confirmed live (`python --version` / `python -m pip --version` both work).
+Going forward, new automation/backend builds should follow this repo's existing language
+default (2026-07-24 entry: Python for automation, TypeScript for interfaces) without the
+"no Python installed" caveat that used to override it — PowerShell is no longer the forced
+default for scripts that would otherwise be Python.
+
+**Why:** Surfaced when building the `web-scraping` skill — Tyler stopped a build step to
+correct the plan away from PowerShell REST calls once he realized Python was viable again:
+"if we're gonna use Python, and I think that's better for AI automation... I downloaded
+Python yesterday. So if we have to use Python and is better for the long term future and
+future plans let's do that."
+
+**Alternatives considered:** Keep defaulting to PowerShell for consistency with
+`scripts/clickup_push.ps1` — rejected; that choice was explicitly an environment
+workaround, not a preference, and the environment constraint is gone.
+
+**Owner:** Tyler — existing PowerShell scripts (`clickup_push.ps1`) aren't being ported
+retroactively, this only changes the default for new work.
+
+---
+
+## 2026-07-27 — API reference docs: capture on-hand detail immediately, still don't hunt for unused endpoints
+
+**Decision:** Refined the 2026-07-23 "document ClickUp endpoints only as they get used"
+rule. The rule against *researching* endpoints nobody's using still stands — but if an
+endpoint's real detail is already in front of Claude for free (e.g. pasted by Tyler, or
+surfaced while researching something else), document it immediately in the relevant
+`references/*.md` file even if it isn't being wired into code yet. Only flag clearly what's
+confirmed vs. still unconfirmed — never guess a schema to fill the gap.
+
+**Why:** Tyler, building `web-scraping`: "we wanna make sure that we have those [endpoints]
+... so you don't have to waste as much tokens to find the endpoints you need... especially
+for the sub agent as well." He selected Search/Scrape/Crawl/Interact during Firecrawl
+onboarding and pasted their full agent-onboarding doc, which already described all four —
+re-deriving that later via a fresh lookup would be pure waste of the exact kind the
+original ClickUp rule was trying to prevent, just from the opposite direction (throwing
+away free information instead of hoarding unused information).
+
+**Alternatives considered:** Keep the ClickUp rule as strictly "only what's used, only when
+used" — rejected; that optimizes against researching unused things but doesn't account for
+detail that arrives unprompted at zero additional cost. Front-load full research on every
+provider's entire API surface regardless of whether it's already in context — rejected,
+still the original bloat risk the 2026-07-23 rule exists to prevent.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-26 — ClickUp's role under reconsideration (deferred, not decided)
+
+**Decision:** No decision yet — explicitly parked. Tyler is reconsidering what job ClickUp
+should actually do. Current lean, not committed: something lighter than mirroring every
+`project-planner` build checklist — maybe just a running list of core open questions plus
+concrete daily to-dos.
+
+**Why:** Noticed most real building/brainstorming already happens naturally inside Claude
+Code sessions via `project-planner` itself, not pre-staged as ClickUp tasks. Direct quote:
+"that's something for another day... I'm just focused on this Obsidian thing because... if
+we get all the knowledge in, we don't have a way of losing it, then I think that's more
+beneficial than having the tasks ready to go." Knowledge capture (the Obsidian system) is
+the higher near-term priority; this is explicitly not urgent.
+
+**Alternatives considered:** N/A — not yet re-scoped, just flagged as open.
+
+**Owner:** Tyler — revisit when he brings ClickUp's scope up again, likely worth its own
+`/level-up` or planning session rather than a redesign guessed at on his behalf. Don't
+assume every future `project-planner` build should still auto-push to ClickUp until this
+resolves.
+
+---
+
+## 2026-07-27 — Secrets: root `.env` for shared infra, skill-local only for genuinely standalone skills
+
+**Decision:** `web-scraping`'s Exa + Firecrawl API keys moved from a skill-local `.env`
+(what was first built) to the repo-root `.env` (same file `CLICKUP_API_TOKEN` already
+lives in). Standing rule going forward: a secret goes in the **root** `.env` if more than
+one skill needs it, or reasonably will; it stays **skill-local** only when a skill is
+meant to be genuinely standalone/portable on its own (e.g. `ask-the-board`, which is
+explicitly designed to be copied as one self-contained folder into another tool entirely).
+
+**Why:** Tyler floated a future daily AI/trading news-brief skill that would also need
+Exa/Firecrawl — realizing the keys are shared infrastructure, not private to
+`web-scraping`, changed the right answer. Root `.env` means one key, one place, no
+duplicate copies to keep in sync if a key ever rotates. Also cheaper for Claude/subagents
+token-wise: one predictable, always-in-the-same-place file beats hunting across several
+scattered per-skill `.env` files that might drift.
+
+**Alternatives considered:** Keep it skill-local for `web-scraping` specifically since it
+was already built that way — rejected once the future-reuse case came up; better to fix
+it now than duplicate the key into every new skill that needs it later.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-27 — Exa + Firecrawl reference docs moved to repo root (matching clickup-api.md); Exa uses its official SDK, not raw REST
+
+**Decision:** Two follow-ups to the root-`.env` move above, same session:
+
+1. **API reference docs relocated.** What was `.claude/skills/web-scraping/references/
+   apis.md` (skill-local) is now two files at the repo root — `references/exa-api.md` and
+   `references/firecrawl-api.md` — mirroring `references/clickup-api.md`'s exact structure
+   (growth policy, auth, rate limits, endpoints with Source links, gotchas, all-sources
+   list). The skill-local file now just points to these instead of duplicating them.
+2. **Exa gets the official `exa-py` SDK; Firecrawl stays plain `requests`.** Reversed an
+   earlier lean toward raw REST for both, for consistency. Exa's real API has documented
+   footguns a hand-rolled implementation would have to get right with no safety net:
+   deprecated parameters that silently no-op (`useAutoprompt`), parameters that must nest
+   a specific way (`highlights` inside `contents` on `/search` but top-level on
+   `/contents`), and a snake_case/camelCase mismatch between raw JSON and the SDK.
+   Firecrawl's API is simple enough (one endpoint, few params) that raw REST stays the
+   right call there.
+
+**Why:** Tyler generated Exa's own coding-agent setup prompt and pasted the full output —
+it surfaced the SDK's real advantages (protects against exactly those footguns) and Exa's
+`outputSchema`/`systemPrompt`/`output.grounding` feature, which does native
+source-attributed synthesis and may simplify `web-scraping`'s own synthesis step. Tyler
+then asked to set up the reference docs "like we did for ClickUp" — same root-level,
+per-provider file pattern, once it was clear (from the earlier root-`.env` decision) that
+Exa/Firecrawl are shared infrastructure, not private to one skill.
+
+**Alternatives considered:** Keep raw REST for Exa too, for internal consistency with
+Firecrawl — rejected; "use the same approach everywhere" is a weaker reason than "use the
+right tool for each API's actual complexity," and the two APIs are genuinely different in
+how forgiving they are of a hand-rolled implementation.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-27 — Standing rule: every new connection defaults to direct API, not MCP — formalized in project-planner and project-builder
+
+**Decision:** Codified what this repo had already been doing ad hoc (gws-cli over a
+Calendar MCP, 2026-07-23; ClickUp raw REST over its MCP server, 2026-07-23; Exa/Firecrawl
+direct API, 2026-07-27) into an explicit standing rule in both `project-planner` and
+`project-builder`: every new connection/API this repo wires up defaults to a direct API
+call (real key in the repo-root `.env`, endpoint docs in a `references/<provider>-api.md`
+file matching `clickup-api.md`'s structure) rather than an MCP server — unless a service's
+auth is genuinely complex/stateful enough that hand-rolled code would likely be fragile,
+or no usable REST API/SDK exists at all, in which case MCP gets recommended explicitly,
+not defaulted to silently either way.
+
+**Why:** Tyler, after seeing the Exa/Firecrawl setup: "follow the same thing we did with
+the dot env and the API endpoints markdown for each one... every project that we do in the
+future, every connection or API that we grab in the future if it's not using an MCP...
+it's all about token usage." The actual mechanism: an MCP server's tool schemas load into
+every conversation's context whether or not they're ever used — a standing, permanent
+cost. A direct API call has zero standing cost; the only expense is documenting the
+endpoint once (already minimized by the 2026-07-27 "capture on-hand detail immediately"
+rule above), then reusing that doc forever. This was already the repo's real pattern, just
+never written down as a rule anyone would apply consistently without re-deriving it.
+
+**Alternatives considered:** Default to MCP for convenience/less custom code — rejected,
+directly contradicts the token-efficiency priority that's been a theme across this whole
+repo (`references/clickup-api.md`'s growth policy, the `gws-cli` choice, this whole 2026-
+07-27 session). Leave the pattern implicit rather than writing it into the skills — rejected
+per Tyler's explicit ask that this apply to every future project, not just be remembered
+informally.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-27 — Root cause found for recurring SSL errors (also hit on gold-trading-dashboard): Norton Antivirus HTTPS scanning, fixed with `truststore`
+
+**Decision:** Every Python script in this repo that makes outbound HTTPS calls should
+call `truststore.inject_into_ssl()` before any `requests`/`urllib3`-based code runs.
+Added to `web-scraping`'s `requirements.txt` and the top of `scripts/exa_search.py`;
+apply the same to every future script that talks to the internet.
+
+**Why:** Python `requests` calls were failing with `SSLCertVerificationError: unable to
+get local issuer certificate` — on this build, and previously (unresolved) on the gold-
+trading-dashboard build, where it was wrongly attributed only to "the build sandbox isn't
+the real machine." Diagnosed for real this time: confirmed DNS resolution worked fine
+(ruling out a network/routing problem), then inspected the actual TLS certificate being
+presented for `www.google.com` via `openssl s_client` — issuer was `CN=Norton Web/Mail
+Shield Root, O=Norton Web/Mail Shield, OU=generated by Norton Antivirus for SSL/TLS
+scanning`. Norton's antivirus intercepts HTTPS traffic to scan it, decrypting and
+re-signing with its own certificate. Windows/browsers already trust this (Norton adds it
+to the OS certificate store on install) — Python doesn't check the OS store by default, it
+carries its own separate bundled list (`certifi`), which doesn't include Norton's
+certificate, hence the failure. Confirmed fix live: installing `truststore` (a
+well-maintained PyPI package built specifically for "OS trusts it, Python's bundled list
+doesn't" cases like AV/corporate HTTPS inspection) and calling
+`truststore.inject_into_ssl()` makes Python check against the same trust store Windows
+already uses — `exa_search.py` went from a hard SSL failure to real, successful API
+results immediately after.
+
+**Not a security downgrade:** rejected `verify=False` explicitly (Tyler's own hard
+requirement) — that disables certificate checking entirely. `truststore` does the
+opposite: it still fully validates every certificate, just against the OS's trust store
+(the same one the browser already uses) instead of a separate, smaller bundled list that
+was missing one legitimate local entry.
+
+**Alternatives considered:** Manually exporting Norton's root certificate and appending it
+to `certifi`'s bundle — rejected, `truststore` is the standard, maintained solution for
+exactly this class of problem and needs no manual cert-wrangling or future maintenance
+when Norton rotates its certificate. Setting `SSL_CERT_FILE`/`REQUESTS_CA_BUNDLE` env vars
+to point at `certifi`'s own bundle — tested first, did **not** fix it (confirms the
+problem was never "no CA bundle," it was specifically "missing Norton's cert").
+
+**Owner:** Tyler — this should also close out the equivalent unresolved question from the
+gold-trading-dashboard build; worth checking if that project hit the same wall and could
+use the same fix.

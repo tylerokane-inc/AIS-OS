@@ -32,6 +32,16 @@ created without Tyler seeing and confirming it first.
   full 12-year-old-beginner mode. See `references/teaching-guide.md`.
 - **Top-down:** start broad (what/why/goal), then work into the details. Never dump everything at once.
 - **Ship v1 fast:** always aim at the smallest useful version. Park extras for v2.
+  **Exception — Claude Code skill / internal automation builds:** these ship fully
+  functional from the start, not staged. Tyler's own words (2026-07-27, building
+  `web-scraping`): "For skills, we don't want the smallest thing that we can use. We want
+  a fully functioning working skill. v1's only apply to projects like apps, connectors,
+  plugins... Skills, we want to work straight from the start." Don't split a skill's
+  must-haves into a v1 + parked "nice-to-haves" — everything genuinely part of the skill's
+  job ships together. The must/nice-to-have split in the 10 core questions still surfaces
+  real scope questions during planning, but for this build type the answer folds
+  differently: things that turn out to be must-haves for the skill to actually do its job
+  well all ship in the one build, not staged into a v2.
 
 ## The flow
 
@@ -148,7 +158,7 @@ Remind Tyler the build itself happens in Claude Code, pointed at `docs/spec.md` 
 - Each new project gets its own home — its own new Desktop folder, or its own Obsidian
   project note/folder once that's where docs are routing. Never mix two projects in one
   folder or note. This repo holds skills and operating info, not project docs.
-- Default to shipping the smallest useful version; write bigger ideas into the "nice-to-haves" list.
+- Default to shipping the smallest useful version; write bigger ideas into the "nice-to-haves" list. **Except Claude Code skill/internal automation builds — those ship complete, see the "Ship v1 fast" exception above.**
 - **Prioritize free APIs/connections; verify before locking one in.** When a project needs
   an outside service, default to genuinely free options over paid ones — cheap only if
   nothing free covers the need. Never take a provider's "free tier" claim at face value:
@@ -159,6 +169,20 @@ Remind Tyler the build itself happens in Claude Code, pointed at `docs/spec.md` 
   Modeling Prep) before landing on a truly free source. A service with no paid tier at all
   (e.g. a government/public-data API) is a stronger guarantee than any commercial "free
   tier" and should be preferred when one exists and fits the need.
+- **Default new connections to direct API calls, not MCP — it's a token-cost decision.**
+  An MCP server's tool schemas load into context at the start of every conversation
+  whether used or not; a direct API call (Python/PowerShell/etc. hitting the REST
+  endpoint) has zero standing cost. Set up every new connection the same way: real keys
+  in the repo-root `.env` (shared across skills, or skill-local only if the skill is
+  meant to be a genuinely standalone/portable export), and a `references/<provider>-api.md`
+  file (repo root, matching `clickup-api.md`'s structure — growth policy, auth, endpoints
+  with source links, gotchas) documenting what's actually used, plus whatever's already in
+  front of Claude for free even if unused yet. **Recommend MCP instead, explicitly, when**
+  a service's auth is genuinely complex/stateful (rotating tokens, not a static key) in a
+  way likely to produce fragile hand-rolled code, or when a service only offers MCP with
+  no usable REST API/SDK at all — say so plainly rather than defaulting silently either
+  way. Precedent: `gws-cli` over a dedicated Calendar MCP, ClickUp raw REST over its MCP
+  server, Exa/Firecrawl direct API (2026-07-23 and 2026-07-27 decision log entries).
 - **Safety for anything automated** (sorting, deleting, moving files/mail): when the tool is
   unsure, it should surface the item for review, never silently hide or delete it. Losing
   something real is far worse than showing one extra. Bake this into any auto-processing plan.
