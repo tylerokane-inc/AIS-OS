@@ -1,4 +1,4 @@
-{
+﻿{
     "personal-trainer-app":  {
                                  "space_id":  "90146700544",
                                  "folder_id":  "901411023035",
@@ -13,5 +13,19 @@
                                                 "Expansion — Future Ideas":  "901418458250"
                                             },
                                  "last_used":  "2026-07-24"
-                             }
+                             },
+    "daily-brief":  {
+                        "space_id":  "90146700544",
+                        "folder_id":  "901411048072",
+                        "phases":  {
+                                       "01: Discovery":  "901418471483",
+                                       "02: Setup":  "901418471500",
+                                       "03: Core":  "901418471510",
+                                       "04: Usable":  "901418471514",
+                                       "05: Ship":  "901418471515",
+                                       "Expansion: ClickUp tasks as real Calendar time-blocks":  "901418471517",
+                                       "Expansion: Ranked list instead of a single priority":  "901418471526"
+                                   },
+                        "last_used":  "2026-07-25"
+                    }
 }
