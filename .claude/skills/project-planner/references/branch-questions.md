@@ -66,7 +66,26 @@ If the project is a mix (e.g. an app WITH a dashboard), run both sets.
 5. **Any limits to respect?** (Rate limits, paid tiers, private data.)
    *Why: hitting a hidden limit mid-build is a classic time-sink.*
 
-## E) OTHER / GENERAL TOOL OR SCRIPT
+## E) CLAUDE CODE SKILL / INTERNAL AUTOMATION (runs inside this repo, not a separate app)
+
+1. **What judgment call does it make each time it runs?** (e.g. "decide which project a note
+   belongs to") — name the hard part, not just the mechanical steps around it.
+   *Why: this is usually why it needs to be a Claude Code skill instead of a plain script —
+   name the judgment so we don't accidentally build a dumb script for a smart problem.*
+2. **What triggers it?** Manual only (a phrase Tyler says), scheduled (runs on its own), or
+   both? If both, what's manual vs. automatic?
+   *Why: automatic triggers are a bigger commitment — get explicit sign-off on what's allowed
+   to run without Tyler asking.*
+3. **What does it read, and what does it write/change?** Be specific about files/folders.
+   *Why: this is where accidental damage happens — know the blast radius before building.*
+4. **What's the accuracy/safety bar?** What happens when it's unsure? (Should always be:
+   flag for review, never guess-and-act — see the Safety rule below.)
+   *Why: for anything editing Tyler's real files/notes, a wrong guess is worse than no action.*
+5. **Does it depend on another system being in place first** (e.g. a vault structure, an
+   index file)? If that dependency doesn't exist yet, is creating it part of THIS build?
+   *Why: catches chicken-and-egg gaps early instead of mid-build.*
+
+## F) OTHER / GENERAL TOOL OR SCRIPT
 
 1. **What goes IN?** (The input: a file, some text, a number...)
 2. **What comes OUT?** (The result you want.)

@@ -1,6 +1,6 @@
 ---
 name: project-planner
-description: Use this whenever Tyler wants to plan or start building something new — an app, web app, mobile app, dashboard, plugin, connector, artifact, tool, or script. Trigger on things like "I want to build...", "help me plan...", "I have an idea for...", "let's start a new project," "I want to make an app/dashboard/plugin/connector," or any moment he's turning an idea into a real thing to ship. This runs a guided interview (10 core questions, then type-specific questions), teaches Tyler as it goes, sets up a clean pro folder on his Desktop, and produces a spec doc + build checklist so he starts every build from a bulletproof plan. Prefer this over jumping straight into building — the whole point is to get the idea fully on the table first.
+description: Use this whenever Tyler wants to plan or start building something new — an app, web app, mobile app, dashboard, plugin, connector, internal Claude Code skill/automation, artifact, tool, or script. Trigger on things like "I want to build...", "help me plan...", "I have an idea for...", "let's start a new project," "I want to make an app/dashboard/plugin/connector/skill," or any moment he's turning an idea into a real thing to ship. This runs a guided interview (10 core questions, then type-specific questions), teaches Tyler as it goes, works out where the finished plan should actually live, and produces a spec doc + build checklist so he starts every build from a bulletproof plan. Prefer this over jumping straight into building — the whole point is to get the idea fully on the table first.
 argument-hint: [project idea]
 ---
 
@@ -41,7 +41,8 @@ Work through these in order. Don't skip ahead. Give a short why-note after each 
 If invoked directly with `$ARGUMENTS` (e.g. `/project-planner a workout tracker app`), treat
 that as the starting idea and skip straight to confirming a working name and type from it.
 Otherwise ask two quick things: a working name for the project, and which type it is
-(app / dashboard / plugin / connector / other). A rough answer is fine — it can change.
+(app / dashboard / plugin / connector / Claude Code skill / other). A rough answer is fine —
+it can change.
 **If Tyler doesn't know the type, that's normal — help him figure it out.** Read his rough
 idea back in plain English, explain which type fits and why, and recommend one. Not knowing
 the type is exactly the kind of thing this planner is here to solve.
@@ -55,14 +56,37 @@ Open `references/branch-questions.md`, pick the set that matches the build type,
 (If the project is a mix, run more than one set.) Summarize "How It's Built" back to him.
 
 ### Step 4 — Folder structure
-Open `references/folder-structures.md`. Match the build type to a template, show Tyler the
-tree, and explain 2-3 folders in plain English so he learns what "clean" looks like.
+Open `references/folder-structures.md`. If the deliverable is CODE (app, dashboard, plugin,
+connector, script), match the build type to a template, show Tyler the tree, and explain 2-3
+folders in plain English so he learns what "clean" looks like.
+
+If the deliverable is an INFORMATION STRUCTURE instead — the project's main output is an
+organization system (a vault, a notes system, an archive) rather than code — do NOT reach for
+a code template and do NOT default to reusing a structure built for a past project (e.g.
+Obsidian's `Daily/Inbox/Projects/Notes/Archive` shape is specific to that project's job, not a
+universal default). Design it fresh each time with Tyler: what are the natural categories this
+information falls into, how does new stuff enter, and how does he find it again later. Show
+the resulting tree and explain the reasoning the same way.
+
+### Step 4.5 — Where does this actually live?
+Ask Tyler directly, don't assume: does this project get its own **new Desktop folder**
+(default for a standalone app/dashboard/tool), or does it belong **inside something that
+already exists** — e.g. as a new skill under this repo's `.claude/skills/` (for a Claude Code
+skill/internal automation type), with its spec/checklist docs filed into Obsidian's
+`02-Projects/` instead of living in this repo or on the Desktop, once Obsidian is set up.
+This repo (the AIOS itself) stays the operating system — skills and how-to-work info only.
+It does not hold per-project spec docs, build checklists, or deep project content — that's
+what Obsidian is for. Confirm the answer before Step 5.
 
 ### Step 5 — Build the project folder + docs
-Create a BRAND-NEW folder for this project, named after the project in kebab-case
-(e.g. `workout-tracker`). Put it in the folder Tyler has connected (the working folder), OR
-ask him where he wants it if that's unclear — don't bury it inside the planner's own folder.
-Build the empty folder structure from Step 4 inside it. Then:
+Based on Step 4.5's answer, either:
+- Create a BRAND-NEW folder for this project, named after the project in kebab-case
+  (e.g. `workout-tracker`), in the folder Tyler has connected (the working folder), OR
+- Create the new skill folder under `.claude/skills/<skill-name>/` in this repo (code/logic
+  only) AND place the docs at the Obsidian location Tyler confirmed (e.g.
+  `02-Projects/<name>.md`) instead of a `docs/` folder in this repo.
+Don't bury either one inside the planner's own folder. Build the empty folder structure from
+Step 4 inside it. Then:
 - Fill `templates/spec-doc.md` with all the answers → save as `docs/spec.md`
 - Fill `templates/build-checklist.md` for this project → save as `docs/build-checklist.md`.
   **Write every checklist item in plain, beginner-friendly English, as a verb + one
@@ -121,7 +145,9 @@ Remind Tyler the build itself happens in Claude Code, pointed at `docs/spec.md` 
 - One question theme per bullet — don't blur two questions together.
 - Never invent Tyler's answers. If he's unsure, help him think, then capture HIS choice.
 - Keep the spec doc as the single source of truth. Everything the build needs lives there.
-- Each new project = its own new Desktop folder. Never mix two projects in one folder.
+- Each new project gets its own home — its own new Desktop folder, or its own Obsidian
+  project note/folder once that's where docs are routing. Never mix two projects in one
+  folder or note. This repo holds skills and operating info, not project docs.
 - Default to shipping the smallest useful version; write bigger ideas into the "nice-to-haves" list.
 - **Safety for anything automated** (sorting, deleting, moving files/mail): when the tool is
   unsure, it should surface the item for review, never silently hide or delete it. Losing
@@ -137,7 +163,7 @@ exists on disk — the file is always the source of truth; ClickUp is a mirror o
 ## Files in this skill
 
 - `references/core-questions.md` — the 10 universal questions + why each matters
-- `references/branch-questions.md` — type-specific questions (app, dashboard, plugin, connector, other)
+- `references/branch-questions.md` — type-specific questions (app, dashboard, plugin, connector, Claude Code skill/automation, other)
 - `references/folder-structures.md` — pro folder templates + the golden rules of clean structure
 - `references/teaching-guide.md` — how to teach (short why-notes + deep 12yo mode)
 - `templates/spec-doc.md` — the project spec template

@@ -14,9 +14,12 @@ Read `references/3ms-framework.md` once. It's how Tyler thinks about AI work. Mi
 - `/audit` — Four-Cs gap report. Run on Day 7, then weekly. Watch your score climb.
 - `/level-up` — Weekly 3Ms interview. Find one automation, scope it, ship it. One per week.
 - `/project-planner` — Launch pad for anything new (app, dashboard, plugin, tool, script). Trigger on "I want to build...", "help me plan...", "I have an idea for...". Runs a guided interview, writes a spec + build checklist to a new project folder, then hands off to `/clickup-push` to make it live.
+- `/project-builder` — Executes a finished project-planner spec/checklist into real, working output. Trigger on "let's build [project]," "build the [project] plan," "time to build X." Never auto-follows planner — always a separate, explicit ask. Surveys real state, asks how load-bearing the build is (crucial vs. simpler), plans the whole build up front, then builds — pausing per phase for review on crucial builds, straight through with a final report on simpler ones. Syncs ClickUp status via `clickup-push` as steps ship (pending a small `clickup-push` upgrade to persist task IDs — see the skill's Phase 4).
 - `/clickup-capture` — Fast lane for a single task or reminder mentioned in passing (not a full build). Trigger on "remind me to...", "add a task for...", "don't let me forget...". Extracts the task and hands off to `/clickup-push`, no interview.
 - `/clickup-push` — The only skill that actually talks to ClickUp. Turns a finished build checklist (or a single task) into real ClickUp Folders/Lists/Tasks, with the standing conventions (numbered sections like `01: Discovery`, answers as comments not task titles, checkbox state → status). `project-planner` and `clickup-capture` call this instead of duplicating ClickUp mechanics themselves; call it directly too if you just want to push something to ClickUp.
 - `/skill-builder` — Use when creating, optimizing, or auditing a Claude Code skill (in this repo or elsewhere). Runs a discovery interview for new skills, or a frontmatter/content/integration/quality checklist for existing ones.
+- `obsidian-organizer` — Files and organizes Tyler's Obsidian daily note. Trigger on "go file today's notes," "go organize today's notes," "what should I work on today," or "check today's notes." Reads/edits the vault directly (`C:\Users\User\Documents\Obsidian_Vault`) — no API. Nightly 11pm auto-run is spec'd but deferred; manual-only for now.
+- `obsidian-context` — Pulls matching prior context from the Obsidian vault into any AIOS conversation, on demand. Trigger on "use Obsidian to find this," "pull any valid info we have from Obsidian to help with this," or "check my notes for X." Read-only; strict no-weak-match rule.
 
 ## Where things live
 
@@ -76,8 +79,9 @@ Registry lives in `connections.md`. Live and verified:
   Notion (secondary/legacy) not wired
 - **Knowledge/files (partial):** Google Drive/Docs/Sheets — OAuth scopes
   authorized via `gws-cli`, but no endpoints used yet (not a current
-  priority). Obsidian (primary for notes) is local, not wired to `gws-cli`
-  or any API — still not yet connected
+  priority). Obsidian (primary for notes) is local — wired via direct file
+  read/write through the `obsidian-organizer` / `obsidian-context` skills,
+  not `gws-cli` or any API (none needed; it's plain-text files on disk)
 
 Not yet wired:
 - **Meeting intelligence:** Fireflies (planned, for speaking-practice

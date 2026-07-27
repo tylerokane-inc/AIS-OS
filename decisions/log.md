@@ -467,3 +467,107 @@ mechanics is exactly the duplication Tyler asked to remove; the skill is now the
 source of truth.
 
 **Owner:** Tyler
+
+---
+
+## 2026-07-24 — Language default for future builds: Python for automation, TypeScript for interfaces
+
+**Decision:** No language is chosen for this repo itself (it's Markdown + Claude Code
+skills, not compiled code — see the 07-23 `scripts/` entry above for why PowerShell
+handles the one script that exists today). As a standing default for *future* builds
+kicked off via `/project-planner`: background automation/backend logic (e.g. an Obsidian
+auto-sorter, an API glue-script) defaults to Python; anything with a visible interface
+(e.g. the trading dashboard) defaults to TypeScript. The actual pick still happens per-
+project inside `/project-planner`, not here — this just sets the default lean.
+
+**Why:** Tyler asked to log this after a plain-English explainer on why Python tends to
+win for AI/automation work (simpler syntax, dominant AI/scripting ecosystem) while
+TypeScript tends to win for web interfaces — so the reasoning doesn't get re-explained
+from scratch next time a project's language comes up.
+
+**Alternatives considered:** None — this is a default lean to speed up future
+`/project-planner` runs, not a binding rule; a project's actual constraints (e.g. no
+Python installed on this machine yet, per the 07-23 entry) can still override it.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-26 — Obsidian knowledge system shipped; Project Builder skill created; `03-Notes` reorganized
+
+**Decision:** Built the Obsidian knowledge-system project (spec at `Obsidian_Vault\
+02-Projects\Obsidian Operating System\01-Plan.md`) live, then used that same build as the
+worked example to design a new skill, `project-builder` — the execution phase that picks up
+a finished `project-planner` spec and actually ships it, distinct from planning itself.
+Several sub-decisions came out of the same session:
+
+1. **Two new skills built and tested:** `obsidian-organizer` (filing pass + priority check,
+   now also owns `01-Inbox\` as a general capture front-door) and `obsidian-context`
+   (read-only, strict no-weak-match rule). Both read/write the vault directly — no API.
+   The 11pm nightly auto-filing trigger from the original spec was deliberately deferred —
+   manual-only until proven, to be wired via `/schedule` later.
+2. **`project-builder` created** with three explicit rules from Tyler: (a) never
+   auto-continues right after `project-planner` finishes — building is always a separate,
+   deliberate decision; (b) asks up front whether a build is crucial/day-to-day
+   infrastructure (phase-by-phase pause + review + 1-2 improvement ideas each phase) or
+   simpler (straight through to one final report); (c) every project's docs ship as a
+   folder (`00-INDEX.md` + a portable, unedited `01-Plan.md` + a `02-How-It-Works.md`
+   written after the build, including a skill's real frontmatter verbatim) — matches the
+   existing `Swimming Pool App` convention, first applied to the Obsidian project itself.
+   ClickUp-sync-on-ship was designed but is **blocked**: `clickup-push`'s `push-plan` has no
+   way yet to persist a step→task-ID map for later lookup — flagged in the skill file, not
+   built.
+3. **`03-Notes` reorganized.** Tyler didn't like the `Life/`/`AI-Builds/` umbrella split —
+   too nested, not specific enough. Replaced with direct top-level categories:
+   `Business/`, `Health/`, `Personal/`, `Build-Ideas/` (renamed from `AI-Builds`), and
+   `Templates/` pulled out on its own since it's live infrastructure (the actual daily-note
+   template), not personal reference. New categories get added directly under `03-Notes/`
+   going forward, no umbrella reintroduced. Fixed three files that had picked up an
+   accidental doubled `.md.md` extension along the way.
+4. **Two live Obsidian config bugs found and fixed** while working: `.obsidian/
+   daily-notes.json` still pointed at pre-rename folder/template paths from before the
+   vault restructure, and the daily-note template had a redundant `# {{date}}` heading
+   duplicating Obsidian's automatic filename-based title. `obsidian-organizer` now reads
+   that config live at runtime instead of hardcoding a date format, since Tyler already
+   changed the format once mid-session (`YYYY-MM-DD` → `MM-DD-YYYY`).
+
+**Why:** Same instinct as the `project-planner` skill upgrades earlier — Tyler wanted to
+run a real build, then extract a reusable process from it rather than just shipping one
+artifact. The phase-by-phase pacing came from his own framing directly: "it's not about
+being quick, it's about building things right the first time." The `03-Notes` reorg and
+config fixes surfaced naturally while actually using the finished system, not from a review
+pass — exactly the kind of thing a real dry-run catches that planning alone wouldn't.
+
+**Alternatives considered:** Auto-continuing from `project-planner` straight into
+`project-builder` in one flow — rejected, Tyler wants planning and building kept as two
+separate, deliberate decisions. A single flat pacing mode (always paused or always
+straight-through) — rejected in favor of a stakes-scaled toggle, since Tyler explicitly
+distinguished "crucial" builds from routine ones. Keeping `Life`/`AI-Builds` as umbrella
+folders and just renaming them — rejected; the core complaint was structural nesting depth,
+not naming.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-25 — BillTrack `wrangler.jsonc` renamed to match Cloudflare Worker
+
+**Decision:** Updated `wrangler.jsonc` in the separate `BillTrack` project
+(`C:\Users\User\Desktop\BillTrack`, its own repo at
+`github.com/tylerokane-inc/BillTrack`, not part of this AIOS repo) — changed
+`"name": "subtracker"` to `"name": "billtrack"` to match the Worker's new
+name on the Cloudflare dashboard, then committed and pushed directly to
+`master`.
+
+**Why:** Tyler renamed the Worker in Cloudflare's UI, which doesn't sync
+back into the repo's config automatically — Cloudflare flagged the mismatch
+with a banner suggesting the config update. Tyler tried to do this push
+himself first but a Git tool prompted him to create a new branch, which
+looked wrong, so he backed out and asked Claude to do it instead. The repo
+was already clean and in sync with `origin/master`, so no branch was
+actually needed — just edit, commit, push to the existing branch.
+
+**Alternatives considered:** None — single-line config fix, direct push to
+`master` was correct since there was no divergence to reconcile.
+
+**Owner:** Tyler

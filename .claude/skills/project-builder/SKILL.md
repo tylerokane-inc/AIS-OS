@@ -1,0 +1,131 @@
+---
+name: project-builder
+description: Use when Tyler wants to actually execute a finished project-planner spec/build checklist into real, working output — an app, skill, script, dashboard, or automation. Trigger on "let's build [project]," "build the [project] plan," "time to build X," or "execute the checklist for X." Never auto-invoked right after project-planner finishes — building is always a separate, explicit decision from planning.
+argument-hint: [project name or path to its spec/checklist]
+---
+
+# Project Builder
+
+`project-planner` produces the plan — spec + build checklist, "measure twice." This skill
+owns actually executing that plan into working code/skills/files, "cut once." It never
+fires automatically the moment Planner finishes; Tyler decides separately, maybe same day,
+maybe weeks later, when he's ready to build.
+
+Built by observing the real build of `obsidian-organizer` + `obsidian-context` (2026-07-26)
+from the spec at `Obsidian_Vault\02-Projects\Obsidian-System.md` — that session is the
+reference example for every phase below.
+
+## Phase 0 — Kickoff
+
+Confirm which finished spec/checklist is being built (a path, or infer from what Tyler just
+named). If no finished plan exists yet, say so and point to `project-planner` instead —
+this skill has nothing to execute without one.
+
+## Phase 1 — Discovery
+
+1. **Read the whole spec/checklist** before writing anything — every section, not just the
+   build order.
+2. **Survey the real environment** the build touches: find an exemplar file in the same
+   category (an existing skill, script, or module built the same way) to match house style,
+   and check the *current real state* of whatever the build operates on (existing data,
+   existing files, existing config) — don't design against the spec's assumptions alone.
+3. **Isolate genuinely open decisions** — things the spec explicitly left unresolved or
+   couldn't have anticipated (not questions the spec already answered).
+4. **Ask one minimal, batched round** covering (a) those open decisions and (b) how
+   load-bearing this build is:
+   - **Crucial / day-to-day infrastructure** (something Tyler will depend on running
+     correctly) → every phase from here on pauses for his review.
+   - **Simpler / lower-stakes** → plan fully, then build straight through with only
+     brief phase-transition updates and a final report.
+   Keep this round small — a couple of questions, not a re-run of Planner's interview.
+
+## Phase 2 — Plan
+
+Write the **complete, dependency-ordered** todo list for the entire build, start to finish
+— every phase below, not just the next step — before marking anything in progress. Order
+by real dependencies (e.g., build the piece other pieces reference first), not necessarily
+the order the spec lists things in.
+
+- **Crucial:** show the plan, get a go-ahead before building.
+- **Simpler:** proceed straight to Phase 3.
+
+## Phase 3 — Build
+
+Construct each artifact in dependency order. If the artifact is itself a Claude Code skill,
+follow `skill-builder`'s Build Phase conventions (frontmatter, structure, `CLAUDE.md` entry).
+
+- **Crucial:** pause after each artifact/component. Report concretely what was just built,
+  offer **one or two** specific ideas for making it better — things the plan didn't
+  anticipate, spotted while actually building it — and ask only if something needs a real
+  decision. Wait for a go-ahead before the next component. Don't flood this with more than
+  a couple ideas per phase; Tyler reads them and picks what's worth folding in.
+- **Simpler:** build straight through, one brief update per component.
+
+## Phase 4 — Wire up
+
+1. **Document each new artifact** wherever it needs to be indexed — `CLAUDE.md` for a new
+   skill, a README for a new script/app, etc.
+2. **Package the project's own docs as a folder, not a lone file** — matches the existing
+   `Swimming Pool App` / `Obsidian Operating System` convention in the vault:
+   - `00-INDEX.md` — short overview + a table/list linking the other files
+   - `01-Plan.md` (or numbered per section, for a bigger plan) — the original spec/checklist
+     from `project-planner`, kept as-is and portable — reusable, tweakable, or handoff/sale-
+     ready without needing anything else in the folder
+   - `02-How-It-Works.md` — written **after** the build finishes: what actually shipped, how
+     to trigger/use it, current status, what's deferred, open questions carried over from
+     the plan. For a skill build, include the skill's actual frontmatter (`name` +
+     `description`) verbatim — that's the literal trigger mechanism, worth showing plainly
+     rather than paraphrasing.
+   - If an existing single-file spec is being folded into this structure, verify the new
+     plan file's content matches the original (diff it) before removing the old file, and
+     only delete it after Tyler confirms — don't delete an Obsidian/vault file unprompted.
+3. **Sync ClickUp.** For each checklist step just shipped, hand off to `clickup-push` to
+   flip that step's task to Complete — never update ClickUp mechanics directly here.
+   - **Known gap (as of 2026-07-26):** `clickup-push`'s `push-plan` doesn't yet persist a
+     step → ClickUp-task-ID map anywhere this skill can read it back later. Until that's
+     added to `clickup-push`, this sync step can't actually run — say so plainly and skip
+     it rather than guessing a task ID.
+
+## Phase 5 — Real-data pass
+
+Run the build against real, current data/state as its actual first use — not a
+hypothetical dry run. If migrating or backfilling something (a stale index, an unsorted
+folder), do that migration for real here.
+
+## Phase 6 — Test
+
+Invoke the built thing for real, end-to-end — not just a re-read of its own instructions.
+Confirm guardrails and hard rules hold against real edge cases (a missing file, a weak
+match, an ambiguous case) rather than only the happy path.
+
+## Phase 7 — Report + reflect
+
+1. Give a concise final summary tied back to the spec's own "done and working" bar — what's
+   built, what's tested, what's deliberately deferred and why.
+2. Offer one or two ideas for how the finished thing could be even better — same spirit as
+   the Phase 3 check-ins, but for the whole build now that it's done.
+3. Separately, **only if this build hit something the current Builder process didn't
+   already cover** (a new build type, a new kind of guardrail, a new gap like the ClickUp
+   one above) — ask whether this skill itself should be upgraded. Routine, repeat-shape
+   builds just get the report; no reflection ritual every time.
+4. Update any project-status memory so the next session picks up from an accurate state.
+
+## Guardrails
+
+- Never skip Phase 1's real-environment survey — building from the spec's text alone is how
+  drift happens (e.g., an index file the spec assumed was current but wasn't).
+- Never auto-start right after `project-planner` finishes — Phase 0 always waits for an
+  explicit, separate signal from Tyler.
+- Simpler builds still get the full ordered plan in Phase 2 — the stakes decision changes
+  how often this skill pauses to check in, never whether the plan is complete.
+- Don't invent ClickUp update mechanics inline if the ID-mapping gap in Phase 4 isn't
+  resolved — flag it, don't fake it.
+- Keep improvement ideas at one or two per check-in — this is a chance for Tyler to catch
+  things, not a running commentary.
+
+## What this skill explicitly does NOT do
+
+The 10 core questions, spec-writing, or picking a folder structure — all `project-planner`
+territory, upstream of this skill. Talking to the ClickUp API directly — always hands off
+to `clickup-push`. Deciding whether something is even a project worth building — that
+decision is made before this skill is ever invoked.
