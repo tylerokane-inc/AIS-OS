@@ -149,6 +149,16 @@ Remind Tyler the build itself happens in Claude Code, pointed at `docs/spec.md` 
   project note/folder once that's where docs are routing. Never mix two projects in one
   folder or note. This repo holds skills and operating info, not project docs.
 - Default to shipping the smallest useful version; write bigger ideas into the "nice-to-haves" list.
+- **Prioritize free APIs/connections; verify before locking one in.** When a project needs
+  an outside service, default to genuinely free options over paid ones — cheap only if
+  nothing free covers the need. Never take a provider's "free tier" claim at face value:
+  check their *current* pricing page for the *specific endpoint* the project needs (not a
+  general "has a free tier" impression) before writing it into the spec or checklist.
+  "Free tier" marketing routinely gates the exact endpoint a project needs behind a paid
+  plan — the gold-trading-dashboard project hit this twice (Finnhub, then Financial
+  Modeling Prep) before landing on a truly free source. A service with no paid tier at all
+  (e.g. a government/public-data API) is a stronger guarantee than any commercial "free
+  tier" and should be preferred when one exists and fits the need.
 - **Safety for anything automated** (sorting, deleting, moving files/mail): when the tool is
   unsure, it should surface the item for review, never silently hide or delete it. Losing
   something real is far worse than showing one extra. Bake this into any auto-processing plan.

@@ -25,12 +25,27 @@ this skill has nothing to execute without one.
 
 1. **Read the whole spec/checklist** before writing anything — every section, not just the
    build order.
-2. **Survey the real environment** the build touches: find an exemplar file in the same
-   category (an existing skill, script, or module built the same way) to match house style,
-   and check the *current real state* of whatever the build operates on (existing data,
-   existing files, existing config) — don't design against the spec's assumptions alone.
+2. **Survey the real environment** the build touches: check the *current real state* of
+   whatever the build operates on (existing data, existing files, existing config) — don't
+   design against the spec's assumptions alone. **Don't go looking for another existing
+   project to use as a structural template**, and don't offer one either ("want me to
+   structure it like X?") — build directly for what this project actually needs. If a
+   genuinely relevant naming/structure convention is already obvious from context (not
+   something you had to go dig for), it's fine to follow it, but this is never a step where
+   you browse other projects for a pattern to copy. (2026-07-27: pulled up an unrelated
+   project as a template example unprompted, before being asked — Tyler dislikes that
+   project's own structure specifically, and more broadly doesn't want template-hunting as
+   a default step until something is deliberately set as a real convention.)
 3. **Isolate genuinely open decisions** — things the spec explicitly left unresolved or
    couldn't have anticipated (not questions the spec already answered).
+3.5. **Re-verify any third-party API's free-tier access before wiring code to it**, even if
+   the spec already named a provider — pricing pages change, and "free tier" marketing
+   often gates the exact endpoint needed behind a paid plan (this bit the gold-trading-
+   dashboard project twice: Finnhub, then Financial Modeling Prep, before landing on FRED —
+   a genuinely free, no-paid-tier government source). Check the provider's current pricing
+   docs for the specific endpoint, or test it directly, before writing integration code.
+   Prefer free over cheap, and prefer a service with no paid tier at all over a "free tier"
+   of a commercial one when both fit the need.
 4. **Ask one minimal, batched round** covering (a) those open decisions and (b) how
    load-bearing this build is:
    - **Crucial / day-to-day infrastructure** (something Tyler will depend on running
@@ -65,13 +80,15 @@ follow `skill-builder`'s Build Phase conventions (frontmatter, structure, `CLAUD
 
 1. **Document each new artifact** wherever it needs to be indexed — `CLAUDE.md` for a new
    skill, a README for a new script/app, etc.
-2. **Package the project's own docs as a folder, not a lone file** — matches the existing
-   `Swimming Pool App` / `Obsidian Operating System` convention in the vault:
-   - `00-INDEX.md` — short overview + a table/list linking the other files
-   - `01-Plan.md` (or numbered per section, for a bigger plan) — the original spec/checklist
-     from `project-planner`, kept as-is and portable — reusable, tweakable, or handoff/sale-
-     ready without needing anything else in the folder
-   - `02-How-It-Works.md` — written **after** the build finishes: what actually shipped, how
+2. **Package the project's own docs to fit what this project actually needs** — don't
+   default to a fixed multi-file shape just because one exists elsewhere in the vault (see
+   Phase 1's no-template-hunting rule). For most builds, a short overview/index plus the
+   original plan plus a post-build "how it works" note is enough — but size this to the
+   project, not to precedent:
+   - Overview — short, links to the other files if there are more than one
+   - The original spec/checklist from `project-planner`, kept as-is and portable — reusable,
+     tweakable, or handoff/sale-ready without needing anything else in the folder
+   - A "how it works" note written **after** the build finishes: what actually shipped, how
      to trigger/use it, current status, what's deferred, open questions carried over from
      the plan. For a skill build, include the skill's actual frontmatter (`name` +
      `description`) verbatim — that's the literal trigger mechanism, worth showing plainly
@@ -122,6 +139,21 @@ match, an ambiguous case) rather than only the happy path.
   resolved — flag it, don't fake it.
 - Keep improvement ideas at one or two per check-in — this is a chance for Tyler to catch
   things, not a running commentary.
+- **Never render a raw exception/error message in anything client-facing** (a web page, a
+  log a user might screenshot) if the code touches API keys or secrets — exception text
+  often includes the full request URL, which includes the key as a query param. Log the
+  real error server-side only; show a short, generic, safe message to the user. (Shipped
+  this bug for real during the gold-trading-dashboard build, 2026-07-26 — caught and fixed
+  it, but it should never happen in the first place.)
+- **The build sandbox's own shell tools are not the user's real machine for anything
+  network- or process-related** — outbound HTTPS calls from Bash/PowerShell tool calls can
+  fail here even with valid keys and a working user machine (this is a sandbox network
+  limitation, not evidence of a bad key, bad cert, or antivirus interference on the user's
+  end — don't diagnose the user's machine based on it). The same applies to `netstat`/process
+  state: a PID or listening port seen through these tools may not reflect what's actually
+  running on the user's real machine. When something needs live verification (a real API
+  call, a real running server), say so plainly and have the user run/check it themselves
+  rather than guessing from sandboxed tool output.
 
 ## What this skill explicitly does NOT do
 

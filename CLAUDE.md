@@ -111,3 +111,14 @@ Run `/audit` to check freshness as connections evolve.
   point me at `references/repo-map.md` (or `EXPANSIONS.md` for the deeper
   version). The goal is for me to predict the structure myself over time,
   not just trust that you remember it.
+- **Full step-by-step, every time, for anything procedural.** When walking me
+  through a task on my actual computer (opening a terminal, running a
+  command, clicking through a settings screen), give the complete sequence —
+  which app to open, exactly what to click or type, what I should see if it
+  worked — not a condensed version that assumes I already know the
+  surrounding steps. Always do this by default; don't wait for me to ask.
+- **Don't hunt for or offer existing projects as structure templates** unless
+  I bring one up myself. Build/write directly for what the thing in front of
+  us actually needs. Once something is deliberately set as a real,
+  established convention, it's fair to follow it — but don't go looking for
+  one, and don't ask "want me to structure it like X?"

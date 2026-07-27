@@ -29,6 +29,10 @@ If the project is a mix (e.g. an app WITH a dashboard), run both sets.
 
 1. **Where does the data come from?** (A file, a connector, an app, live API.)
    *Why: no data source, no dashboard. This is step zero.*
+   *If it's a live API: prefer free options, and confirm on the provider's current pricing
+   page that the SPECIFIC endpoint needed is actually included free — not just that the
+   provider "has a free tier." Free tiers routinely gate the exact data you need behind a
+   paid plan.*
 2. **What are the key numbers (KPIs)** you want to see at a glance? List 3-6.
    *Why: a dashboard is about a few numbers that matter, not all of them.*
 3. **Charts, tables, or both?** For each number, how do you want to see it?
@@ -64,7 +68,9 @@ If the project is a mix (e.g. an app WITH a dashboard), run both sets.
 4. **How does it log in (auth)?** API key, OAuth, token? (Check the service's docs.)
    *Why: auth is usually the hardest part. Sort it early.*
 5. **Any limits to respect?** (Rate limits, paid tiers, private data.)
-   *Why: hitting a hidden limit mid-build is a classic time-sink.*
+   *Why: hitting a hidden limit mid-build is a classic time-sink. Prefer a genuinely free
+   service over a paid one, and confirm on the provider's current pricing page that the
+   exact endpoint needed is free — don't assume from a general "free tier" impression.*
 
 ## E) CLAUDE CODE SKILL / INTERNAL AUTOMATION (runs inside this repo, not a separate app)
 
