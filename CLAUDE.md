@@ -11,14 +11,17 @@ Read `references/operator-loop.md` once. It's how Tyler thinks about AI work. Th
 - `/onboard` — already run if you're seeing this filled in. Re-run any time to refresh from an edited `aios-intake.md`.
 - `/audit` — Four Pillars gap report. Run on Day 7, then weekly. Watch your score climb.
 - `/level-up` — Weekly Operator Loop interview. Find one automation, decide on it, ship it. One per week.
-- `/project-planner` — Launch pad for anything new (app, dashboard, plugin, tool, script). Trigger on "I want to build...", "help me plan...", "I have an idea for...". Runs a guided interview, writes a spec + build checklist to a new project folder, then hands off to `/clickup-push` to make it live.
+- `/project-planner` — Launch pad for anything new (app, dashboard, plugin, tool, script). Trigger on "I want to build...", "help me plan...", "I have an idea for...". Runs a guided interview that keeps going until Tyler says it's enough (or caps it at an exact N-more-questions count on request), researches comparable existing products via `web-scrape` to ground feature questions in real precedent, writes a spec + build checklist to a new project folder, then hands off to `/clickup-push` to make it live. Never proceeds into an actual build itself — that's always a separate, explicit ask.
 - `/project-builder` — Executes a finished project-planner spec/checklist into real, working output. Trigger on "let's build [project]," "build the [project] plan," "time to build X." Never auto-follows planner — always a separate, explicit ask. Surveys real state, asks how load-bearing the build is (crucial vs. simpler), plans the whole build up front, then builds — pausing per phase for review on crucial builds, straight through with a final report on simpler ones. Syncs ClickUp status via `clickup-push` as steps ship (pending a small `clickup-push` upgrade to persist task IDs — see the skill's Phase 4).
+- `debug` — Root-cause-first troubleshooting for something already built that's broken or misbehaving. Trigger on "this is broken," "I'm getting an error," "why doesn't this work," or pasting an error/screenshot. Reproduces the failure for real, isolates which layer it's actually in, confirms the root cause before touching code, then fixes and verifies — never patches the nearest symptom or expands into a drive-by refactor.
 - `/clickup-capture` — Fast lane for a single task or reminder mentioned in passing (not a full build). Trigger on "remind me to...", "add a task for...", "don't let me forget...". Extracts the task and hands off to `/clickup-push`, no interview.
 - `/clickup-push` — The only skill that actually talks to ClickUp. Turns a finished build checklist (or a single task) into real ClickUp Folders/Lists/Tasks, with the standing conventions (numbered sections like `01: Discovery`, answers as comments not task titles, checkbox state → status). `project-planner` and `clickup-capture` call this instead of duplicating ClickUp mechanics themselves; call it directly too if you just want to push something to ClickUp.
 - `/skill-builder` — Use when creating, optimizing, or auditing a Claude Code skill (in this repo or elsewhere). Runs a discovery interview for new skills, or a frontmatter/content/integration/quality checklist for existing ones.
 - `obsidian-organizer` — Files and organizes Tyler's Obsidian daily note. Trigger on "go file today's notes," "go organize today's notes," "what should I work on today," or "check today's notes." Reads/edits the vault directly (`C:\Users\User\Documents\Obsidian_Vault`) — no API. Nightly 11pm auto-run is spec'd but deferred; manual-only for now.
 - `obsidian-context` — Pulls matching prior context from the Obsidian vault into any AIOS conversation, on demand. Trigger on "use Obsidian to find this," "pull any valid info we have from Obsidian to help with this," or "check my notes for X." Read-only; strict no-weak-match rule.
-- `web-scraping` — Gives Claude (and subagents) real web access Claude's built-in tools can't: semantic search (Exa, fixes keyword-only `WebSearch`) and JS-rendering page fetch (Firecrawl, fixes `WebFetch`'s blank results on modern pages). Mostly fires automatically during research, not on a fixed trigger phrase — foundational utility other skills lean on. Never dumps raw pages; always synthesizes with sources cited.
+- `web-scrape` — Gives Claude (and subagents) real web access Claude's built-in tools can't: semantic search (Exa, fixes keyword-only `WebSearch`) and JS-rendering page fetch (Firecrawl, fixes `WebFetch`'s blank results on modern pages). Mostly fires automatically during research, not on a fixed trigger phrase — foundational utility other skills lean on. Never dumps raw pages; always synthesizes with sources cited.
+- `ingest-source` — Takes any outside source (article, PDF, link, transcript, or content `web-scrape` already found) and files it as a structured, pre-analyzed, cross-linked note in the Obsidian vault. Trigger on "ingest this," "save this to my project," "file this as reference," "add this to my knowledge base," or right after a `web-scrape` call when Tyler wants to keep what was found. The persistence half of the research pipeline `web-scrape` starts but deliberately doesn't finish — routes to `02-Projects/` or `03-Knowledge/`, two-way backlinks genuinely related notes, always files even when nothing exists to link to.
+- `/improve-system` — The AIOS's compounding layer: never fix the same problem twice by hand. Five modes — Audit (stale/conflicting/duplicate notes across `context/`, `references/`, memory), Skill Review (turn recent friction/wins into a skill-file edit), Experience (file a shared story/lesson into memory, decisions/log.md, or both), Historical Review (mine recent Claude Code session transcripts via a subagent for learnings that weren't captured live), Foundation (fill genuine gaps in `context/about-me.md`, `about-business.md`, `priorities.md`). Trigger on `/improve-system`, "add that as a lesson," "capture that," or "review my recent sessions for anything I missed." Manual-only, no scheduled runs. Every mode shows the exact proposed edit and waits for confirmation before writing — never auto-applies.
 
 ## Where things live
 
@@ -52,14 +55,12 @@ This quarter's priorities (`context/priorities.md`):
    missed tasks track, reschedule, and roll forward automatically.
 
 Side projects Tyler's floated (not Day-1 scope, surface these if `/level-up`
-comes looking for automation candidates): multi-terminal workflow, a
-trading dashboard, a fitness-coach app, a nightly speaking-practice review
-pipeline (record → Fireflies transcript → next-day review dashboard), a
-daily AI/trading news brief (would reuse the `web-scraping` skill's Exa/
-Firecrawl connections).
+comes looking for automation candidates): multi-terminal workflow, trading
+dashboard, fitness-coach app, nightly speaking-practice review pipeline,
+daily AI/trading news brief. Fuller detail on each: `context/about-me.md`.
 
 Shipped from this list already: "board of advisors" → `ask-the-board` skill;
-web-scraping → `web-scraping` skill (both 2026-07-27).
+web-scrape → `web-scrape` skill (both 2026-07-27).
 
 ## Voice
 
