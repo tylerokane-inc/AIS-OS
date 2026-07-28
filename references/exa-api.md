@@ -1,7 +1,7 @@
 # Exa API Reference
 
 Researched-once-saved-forever guide for the Exa API (semantic/neural web search).
-Used by the `web-scraping` skill, and any future skill that needs the same
+Used by the `web-scrape` skill, and any future skill that needs the same
 capability (e.g. a planned daily AI/trading news brief) — this is why the key
 and this reference live at the repo root, not inside one skill's folder. See
 `decisions/log.md` 2026-07-27 ("Secrets: root `.env` for shared infra").
@@ -94,7 +94,7 @@ Response:
   `highlights`, `summary` per result, plus `costDollars`
 - When `outputSchema` is used: `output.content` (synthesized JSON matching
   the schema) + `output.grounding` (array of `{field, citations, confidence}`
-  — this is the source-attribution our `web-scraping` skill's synthesis step
+  — this is the source-attribution our `web-scrape` skill's synthesis step
   needs)
 
 Source: https://docs.exa.ai/reference/search-api-guide-for-coding-agents
@@ -113,7 +113,7 @@ easy to mix up, see gotchas below).
 ## Not used — noted for completeness
 
 `POST /answer` — grounded single-answer Q&A with citations, built for
-question-first UIs. Not our use case (`web-scraping` needs retrieval +
+question-first UIs. Not our use case (`web-scrape` needs retrieval +
 structured data for a subagent, not one prose answer) — their own guidance
 recommends `/search` + `outputSchema` for exactly our situation.
 

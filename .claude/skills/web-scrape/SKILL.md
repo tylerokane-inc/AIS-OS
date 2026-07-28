@@ -1,9 +1,9 @@
 ---
-name: web-scraping
+name: web-scrape
 description: Use whenever Claude (or a subagent Claude spins up for research) needs real web content — either Claude's own web tools would fail or fall short (a JavaScript-heavy page WebFetch can't render, a query where WebSearch's keyword matching would miss what's actually meant), or Tyler explicitly asks to search/scrape/research something on the web. This is meant to fire automatically during research, not just on an explicit trigger phrase — the same way obsidian-context sometimes fires on its own. Foundational utility skill other skills lean on.
 ---
 
-# Web Scraping
+# Web Scrape
 
 Fixes two real gaps in Claude's built-in web tools: `WebSearch` matches by keyword and can
 miss what's actually meant; `WebFetch` can't render JavaScript, so a lot of modern pages
@@ -35,16 +35,16 @@ of a bundled one.
 
 Run these via Bash, from the repo root:
 
-1. **`python .claude/skills/web-scraping/scripts/exa_search.py "query"`** — semantic web
+1. **`python .claude/skills/web-scrape/scripts/exa_search.py "query"`** — semantic web
    search. Returns relevant pages with query-relevant highlights (not full pages — kept
    token-efficient on purpose). Add `--output-schema '<json schema>'` and
    `--system-prompt "..."` to get Exa's own synthesized, source-attributed answer back
    directly (see "Synthesis" below) instead of raw results.
-2. **`python .claude/skills/web-scraping/scripts/firecrawl_fetch.py "url"`** — fetch a
+2. **`python .claude/skills/web-scrape/scripts/firecrawl_fetch.py "url"`** — fetch a
    specific URL's real, fully-rendered content (handles JS-heavy pages natively — nothing
    extra to configure). Add `--formats markdown screenshot` for a screenshot alongside the
    text; any of Firecrawl's valid formats work (see `references/firecrawl-api.md`).
-3. **`python .claude/skills/web-scraping/scripts/export_pdf.py --output path/to/file.pdf`**
+3. **`python .claude/skills/web-scrape/scripts/export_pdf.py --output path/to/file.pdf`**
    (reads markdown from stdin, or `--input-file`) — turns markdown into a real PDF file.
    Firecrawl has no native PDF format; this builds one from whatever markdown you already have.
 4. Use Exa and Firecrawl together when it makes sense: Exa to find *what's relevant*,

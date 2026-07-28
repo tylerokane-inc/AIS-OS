@@ -2,7 +2,7 @@
 
 Plain-English reference for the terms that come up every time a new connection/API gets
 wired into this repo. Written 2026-07-27 after walking through it live while building
-`web-scraping`. See `project-planner`/`project-builder`'s "default to direct API, not MCP"
+`web-scrape`. See `project-planner`/`project-builder`'s "default to direct API, not MCP"
 rule and `decisions/log.md` (2026-07-23, 2026-07-27) for the actual standing decision this
 glossary explains the reasoning behind.
 

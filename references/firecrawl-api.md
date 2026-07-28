@@ -1,7 +1,7 @@
 # Firecrawl API Reference
 
 Researched-once-saved-forever guide for the Firecrawl API (JS-rendering page
-scrape). Used by the `web-scraping` skill, and any future skill that needs the
+scrape). Used by the `web-scrape` skill, and any future skill that needs the
 same capability (e.g. a planned daily AI/trading news brief) — this is why the
 key and this reference live at the repo root, not inside one skill's folder.
 See `decisions/log.md` 2026-07-27 ("Secrets: root `.env` for shared infra").

@@ -40,7 +40,7 @@ Trigger: "go file today's notes" / "go organize today's notes."
 **`01-Inbox\` (every item currently sitting there):**
 4. For each item in `01-Inbox\`:
    - **Text/markdown note:** same treatment as daily-note content — split by topic, merge
-     into the right `02-Projects\` or `03-Notes\` section, never blind-appended or duplicated.
+     into the right `02-Projects\` or `03-Knowledge\` section, never blind-appended or duplicated.
    - **Non-text file** (image, PDF, screenshot, etc.): move it into the right destination
      folder next to the note it belongs with, and link to it from that note.
    - Once an item is actually filed, remove it from `01-Inbox\` — the inbox should end up

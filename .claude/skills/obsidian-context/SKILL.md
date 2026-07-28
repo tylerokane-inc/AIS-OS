@@ -17,7 +17,7 @@ Filing and reorganizing the vault is `obsidian-organizer`'s job, not this one.
    `Index.md` lists under Projects and Notes. Only a genuine match counts — same topic, same
    idea, same system/procedure the current conversation is actually about.
 3. **Open only the matching note(s).** If one or more index entries look like a real match,
-   read those specific files (in `02-Projects/` or `03-Notes/`) — never a broader scan.
+   read those specific files (in `02-Projects/` or `03-Knowledge/`) — never a broader scan.
 4. **Surface it, sourced.** Bring the relevant content into the conversation and name which
    note it came from, so Tyler can tell it's grounded in something real, not invented.
 5. **If nothing genuinely matches, say so.** Don't inject a weak or tangential match just to

@@ -832,3 +832,78 @@ of labels, not just the removal of the ™ symbol.
 the original 2026-07-24 entry (left untouched as historical record).
 
 **Owner:** Tyler
+
+---
+
+## 2026-07-27 — Obsidian vault root folder `03-Notes` renamed to `03-Knowledge`
+
+**Decision:** Renamed the vault's `03-Notes/` root folder to `03-Knowledge/` — content
+unchanged (Business/, Health/, Personal/, Build-Ideas/, Templates/ all moved intact), same
+`00`–`04` numbered-prefix convention kept for consistent sort order alongside `00-Daily`,
+`01-Inbox`, `02-Projects`, `04-Archive`. Every reference updated in the same pass:
+`Index.md` (paths + section header, `## Notes` → `## Knowledge`),
+`.obsidian/daily-notes.json` (`template` path — this is live Obsidian config, not just
+documentation; getting it wrong would have broken new daily notes picking up their
+template), `obsidian-organizer/SKILL.md`, `obsidian-context/SKILL.md`, and
+`02-Projects/Obsidian Operating System/02-How-It-Works.md` (current-state references and
+canonical tree updated; historical narrative describing the 2026-07-26 reorg left as
+`03-Notes` since that was the accurate name at the time). `01-Plan.md` deliberately left
+untouched — it's the original portable spec, already documented as expected to go stale.
+
+**Why:** Surfaced while explaining what the not-yet-built `ingest-source` skill actually
+does — Tyler asked "isn't this for saving stuff to my knowledge folder," and on realizing
+there was no folder actually named that, decided `03-Knowledge` was simply the better name
+going forward: "I think we can fit more in there, and make it more relevant for us over
+time." Not a functional need for `ingest-source` itself (routing logic works the same
+regardless of the folder's name) — a naming/clarity call that happened to come up mid-plan.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-27 — `web-scraping` skill renamed to `web-scrape`
+
+**Decision:** Renamed the skill (and its vault project docs) from `web-scraping` to
+`web-scrape` everywhere — code and behavior unchanged, name only. Touched: the skill
+folder itself (`.claude/skills/web-scraping/` → `.claude/skills/web-scrape/`, including
+`SKILL.md`'s frontmatter `name` field, its H1 heading, and the three script-path
+references inside its own workflow steps), `references/apis.md`'s pointer text,
+`CLAUDE.md`'s skill list (2 mentions), `references/firecrawl-api.md`,
+`references/connections-glossary.md`, `references/exa-api.md`, `project-planner/SKILL.md`,
+the vault's `Index.md`, and the vault project folder itself
+(`02-Projects/Web Scraping/` → `02-Projects/Web Scrape/`, including `spec.md`,
+`build-checklist.md`, and `how-it-works.md`). Historical entries earlier in this log
+describing the original build are left saying `web-scraping`, since that was the accurate
+name at the time.
+
+**Why:** Came up directly ahead of building `ingest-source` — Tyler wants the shorter name
+across the board before `ingest-source` is built referencing it, so nothing needs a second
+pass afterward.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-27 — ClickUp pushes paused (sharper than the 2026-07-26 "reconsidering" entry)
+
+**Decision:** No `clickup-push` runs — on this or any future `project-planner`/
+`project-builder` build — until Tyler says otherwise. When `clickup-push` asked which
+Space the freshly-built `ingest-source` project should go in, Tyler's answer was to turn
+ClickUp off for now rather than pick one. Going forward, skip Step 6 / the ClickUp-sync
+phase silently by default instead of asking each time — repeatedly asking is itself the
+friction he flagged.
+
+**Why:** Direct quote: "I think I'd rather learn ClickUp on my own manually before I
+start implementing projects and stuff in there... we've been just working through
+projects now by you asking me questions, which kind of works the same [as what he'd do at
+work in ClickUp]... we'll leave the skills in here but we're gonna have to go through that
+one day... once I figure out how to use ClickUp better manually, then I'll start using
+inside of here." This sharpens the 2026-07-26 "reconsidering, not decided" entry above
+into an actual pause — same underlying reasoning (Obsidian/knowledge capture matters
+more right now), plus a second, new reason: he wants to build ClickUp fluency manually
+before automating on top of it.
+
+**Not lost:** `ingest-source`'s `spec.md` and `build-checklist.md` are already saved in
+Obsidian regardless — a skipped ClickUp push never risks losing the actual plan.
+
+**Owner:** Tyler
