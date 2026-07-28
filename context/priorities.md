@@ -3,6 +3,9 @@
 1. **Daily planning system** — Google Calendar <-> ClickUp connected so
    ClickUp is the to-do hub and the calendar stays complete (no manual
    re-entry, no drift). One clear top priority surfaced each day.
+   *Status: the ClickUp half is on hold — Tyler wants to learn ClickUp
+   manually first before automating it (decisions/log.md, 2026-07-26).
+   The Calendar / top-priority half isn't blocked by this.*
 2. **Auto-organizing Obsidian pipeline** — raw notes land in an inbox, get
    sorted into categorized/linked folders on a schedule. Evolving context
    system that's token-efficient (only relevant context per project, no

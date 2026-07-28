@@ -26,8 +26,11 @@ final) catches his own contradictions early and visibly saves rework.
 - A fitness-coach app
 - A nightly speaking-practice pipeline (record → transcribe via Fireflies →
   review next day via a dashboard, to build a more fluent/professional voice)
-- Current full floated-ideas list (kept up to date as new ones come up)
-  lives in this repo's `CLAUDE.md`, not duplicated here
+- A daily AI/trading news brief (would reuse the `web-scrape` skill's Exa/
+  Firecrawl connections)
+
+The short current-name list also lives in `CLAUDE.md` (so `/level-up` can
+scan it without extra cost); this is the fuller picture.
 
 Note: the "board of advisors" idea that used to be listed here **shipped** —
 it's the `ask-the-board` skill now (`.claude/skills/ask-the-board/`).
