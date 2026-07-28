@@ -1,6 +1,6 @@
 ---
 name: project-planner
-description: Use this whenever Tyler wants to plan or start building something new — an app, web app, mobile app, dashboard, plugin, connector, internal Claude Code skill/automation, artifact, tool, or script. Trigger on things like "I want to build...", "help me plan...", "I have an idea for...", "let's start a new project," "I want to make an app/dashboard/plugin/connector/skill," or any moment he's turning an idea into a real thing to ship. This runs a guided interview (10 core questions, then type-specific questions), teaches Tyler as it goes, works out where the finished plan should actually live, and produces a spec doc + build checklist so he starts every build from a bulletproof plan. Prefer this over jumping straight into building — the whole point is to get the idea fully on the table first.
+description: Use this whenever Tyler wants to plan or start building something new — an app, web app, mobile app, dashboard, plugin, connector, internal Claude Code skill/automation, artifact, tool, or script. Trigger on things like "I want to build...", "help me plan...", "I have an idea for...", "let's start a new project," "I want to make an app/dashboard/plugin/connector/skill," or any moment he's turning an idea into a real thing to ship. This runs a guided interview (10 core questions, type-specific questions, plus feature questions grounded in research on comparable existing products) that keeps going until Tyler says it's enough, teaches him as it goes, works out where the finished plan should actually live, and produces a spec doc + build checklist so he starts every build from a bulletproof plan. Never proceeds into an actual build itself — that's a separate, explicit ask. Prefer this over jumping straight into building — the whole point is to get the idea fully on the table first.
 argument-hint: [project idea]
 ---
 
@@ -34,7 +34,7 @@ created without Tyler seeing and confirming it first.
 - **Ship v1 fast:** always aim at the smallest useful version. Park extras for v2.
   **Exception — Claude Code skill / internal automation builds:** these ship fully
   functional from the start, not staged. Tyler's own words (2026-07-27, building
-  `web-scraping`): "For skills, we don't want the smallest thing that we can use. We want
+  `web-scrape`): "For skills, we don't want the smallest thing that we can use. We want
   a fully functioning working skill. v1's only apply to projects like apps, connectors,
   plugins... Skills, we want to work straight from the start." Don't split a skill's
   must-haves into a v1 + parked "nice-to-haves" — everything genuinely part of the skill's
@@ -61,9 +61,59 @@ the type is exactly the kind of thing this planner is here to solve.
 Open `references/core-questions.md` and ask all 10, in medium batches, with why-notes.
 When done, play back a 3-4 sentence "Big Picture" summary and let Tyler confirm or fix it.
 
+### Step 2.5 — Competitive research (when it applies)
+Check whether this project has real-world comparables — existing apps, tools, or websites
+people already use for roughly this job. True for most apps, dashboards, plugins, and
+connectors. Not true for an internal Claude Code skill/automation, a personal
+information-structure/organization system, or anything Tyler describes as genuinely novel.
+When unsure, ask him in one line rather than guessing.
+
+When it applies:
+1. Tell Tyler what's about to happen and why, briefly: research the popular existing
+   options in this space first, so the feature questions in Step 3 are grounded in real
+   precedent instead of a blank "what features do you want."
+2. Spin up a subagent (`Agent` tool) that uses the **`web-scrape`** skill to research the
+   3-5 most popular/well-known existing products for this specific job (use Step 2's Big
+   Picture — the what/who/problem answers, not just the project's working name — to target
+   the research). Have it identify, for each: the core features every one of them has
+   (table stakes), the features that genuinely differ between them (real choices worth
+   asking Tyler about), and any options/settings they expose he might not have thought to
+   ask for. Use Firecrawl on a specific feature/pricing page only if Exa's own highlights
+   don't already answer it.
+3. Per `web-scrape`'s own rule, the subagent returns a synthesized brief with sources —
+   never a raw dump. Read it back to Tyler in 3-5 sentences (not the full brief unless he
+   asks to see it): what's standard, what's optional, and anything genuinely surprising.
+4. Carry it into Step 3: where a branch question touches a feature the research covered,
+   present the real options surfaced ("most apps handle onboarding with A or B — which
+   fits how you'd use this?") instead of a blank open question.
+
+If the research comes back thin or ambiguous, say so plainly (per `web-scrape`'s own safety
+bar) and fall back to Tyler's own instincts rather than presenting weak findings as settled.
+Skip this step entirely, with a one-line reason, for skill/automation and
+information-structure projects, or any time Tyler says he already knows what he wants and
+doesn't want the detour.
+
 ### Step 3 — Branch questions
-Open `references/branch-questions.md`, pick the set that matches the build type, and ask it.
-(If the project is a mix, run more than one set.) Summarize "How It's Built" back to him.
+Open `references/branch-questions.md`, pick the set that matches the build type, and ask it
+— folding in Step 2.5's research where relevant. (If the project is a mix, run more than one
+set.) Summarize "How It's Built" back to him.
+
+### Step 3.5 — Keep going, or call it enough?
+Don't assume the interview is done just because the fixed lists ran out. The 10 core +
+branch questions are a floor, not a ceiling. Ask Tyler directly whether this feels complete
+or there's more worth digging into. This resolves one of three ways:
+- **Tyler says something like "that's enough" / "I think we've got enough" / "let's
+  move on"** → proceed to Step 4.
+- **Tyler asks for "N more questions"** (e.g. "give me five more, only five") → identify
+  exactly the N biggest remaining gaps — the open questions most likely to bite mid-build,
+  not just whatever's left on a checklist — ask exactly that many, no more, then proceed to
+  Step 4 regardless of how complete it feels afterward. Never quietly slip in one extra past
+  the number he set.
+- **Tyler keeps raising things, or doesn't say to stop** → keep going. Surface the
+  next-most-valuable open question(s) yourself rather than treating the fixed lists as a
+  hard ceiling. This can run multiple rounds.
+This is Tyler's call every time — never silently decide "that's enough" and jump to Step 4
+on the planner's own initiative.
 
 ### Step 4 — Folder structure
 Open `references/folder-structures.md`. If the deliverable is CODE (app, dashboard, plugin,
@@ -152,6 +202,12 @@ Remind Tyler the build itself happens in Claude Code, pointed at `docs/spec.md` 
 
 ## Rules
 
+- **Never hand off into an actual build.** This skill's job ends at a finished spec +
+  checklist on disk (and optionally pushed to ClickUp) — it never proceeds to
+  `project-builder` or writes real project code on its own initiative, even if Tyler seems
+  eager to start building right after the plan is done. Building only happens when Tyler
+  separately, explicitly says so in a new request — "let's build it," not just silence
+  after the plan lands.
 - One question theme per bullet — don't blur two questions together.
 - Never invent Tyler's answers. If he's unsure, help him think, then capture HIS choice.
 - Keep the spec doc as the single source of truth. Everything the build needs lives there.
@@ -191,8 +247,11 @@ Remind Tyler the build itself happens in Claude Code, pointed at `docs/spec.md` 
 
 Write actual code (that's Claude Code, later, pointed at the spec). Skip the interview
 because Tyler seems eager to start — the whole reason this skill exists is to stop that
-impulse and get the idea fully on the table first. Push to ClickUp before the checklist
-exists on disk — the file is always the source of truth; ClickUp is a mirror of it.
+impulse and get the idea fully on the table first. Cut the interview short on its own
+initiative — Step 3.5 makes stopping Tyler's call, not a fixed-length form. Push to ClickUp
+before the checklist exists on disk — the file is always the source of truth; ClickUp is a
+mirror of it. Hand off to `project-builder` or write real project code — that only happens
+on a separate, explicit ask, never automatically once the plan is done.
 
 ## Files in this skill
 
@@ -205,4 +264,6 @@ exists on disk — the file is always the source of truth; ClickUp is a mirror o
 - `templates/README.md` — a GitHub-ready README template
 
 ClickUp mechanics live entirely in the separate `clickup-push` skill (Step 6 hands off to
-it) — this skill has no ClickUp-specific references of its own on purpose.
+it) — this skill has no ClickUp-specific references of its own on purpose. Competitive
+research (Step 2.5) leans on the separate `web-scrape` skill via a subagent — no research
+mechanics of its own live here either.
