@@ -183,6 +183,18 @@ match, an ambiguous case) rather than only the happy path.
   user's actual machine** in every case — if a PID/port check seems to contradict what the
   user reports seeing, say so and ask them to check directly, rather than trusting the tool
   output as more authoritative than their own eyes.
+- **For any installable web app (PWA/`manifest.json`) build, verify `start_url`, `scope`,
+  and every icon `src` in the manifest actually resolve to a real file relative to the
+  manifest file's own location — not just that each file independently returns 200.** Per
+  the Web App Manifest spec, these paths resolve relative to where `manifest.json` itself
+  sits, not the page that links to it or the site root. On the habit-tracker build
+  (2026-07-27), the manifest lived in `public/`, and `start_url: "./index.html"` silently
+  resolved to a nonexistent `public/index.html` — every file still returned 200
+  individually, so a plain "does every asset load" smoke test passed clean, and the bug
+  only surfaced for real once Tyler tapped "Add to Home Screen" on his phone and it locked
+  in the broken launch target. Test this by computing the resolved URL for each manifest
+  path (manifest's own location + its relative path) and requesting *that* URL directly —
+  not just the files as they already sit.
 
 ## What this skill explicitly does NOT do
 
