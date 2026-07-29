@@ -907,3 +907,86 @@ before automating on top of it.
 Obsidian regardless — a skipped ClickUp push never risks losing the actual plan.
 
 **Owner:** Tyler
+
+---
+
+## 2026-07-29 — Bold any question Claude asks Tyler in plain chat text
+
+**Decision:** Added a standing rule to CLAUDE.md's "How you work with me" section: any
+question Claude asks Tyler inside normal chat output gets wrapped in markdown bold
+(`**like this?**`). Doesn't apply to the `AskUserQuestion` tool, which already renders
+questions as a distinct UI element.
+
+**Why:** Tyler jotted this in his Obsidian daily note (`00-Daily/07-28-2026.md`, Quick
+Capture) as one of the highest-leverage small fixes he'd found: "Any questions that are
+asked to me I want them to be BOLD so I can see it clearly and depict it from the other
+text." He'd raised it in an earlier chat, remembered it as something worth acting on, but
+neither of us had it in memory or CLAUDE.md yet — traced back to the source note this
+session.
+
+**Alternatives considered:** None — this is a small, low-risk formatting convention with
+an unambiguous source and no real downside.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-29 — New `project-evolve` skill; build philosophy locked for project-planner/project-builder
+
+**Decision:** Added a third skill, `project-evolve`, for changing/improving a project
+that's already built and live (as opposed to `project-planner`, for something new, or
+`debug`, for something actively broken). It reads the live project's own docs for
+already-flagged unresolved items, opens by asking what's actually happened in real use
+(not a wishlist), filters candidates through "does this matter AND is it currently not
+working," caps the list at 3-5, then writes a short change-spec to that project's own
+`docs/change-log.md` and hands off to `project-builder` to execute. `project-builder` now
+detects "fresh build" vs. "evolve build" automatically from which kind of spec it's handed
+— fresh builds stay simple and aim at v1; evolve builds survey a baseline first and
+re-check it wasn't broken at the end, since real usage/data may already be riding on them.
+Also locked in for `project-planner`: the interview's why/goal/"done" questions (2, 3, 6)
+must reach a genuinely clear answer before moving on, not just get captured like the other
+7; and the first build's must-have list is hard-capped at 3 core features (ceiling, not a
+target).
+
+**Why:** Tyler reviewed his own raw Obsidian notes (07-27 and 07-28) and worked through
+what he actually meant — cutting the original vague "two-phase" framing (no fixed rule for
+when to move past v1; that's his own judgment call after ~a week of real use, not something
+worth automating). A subagent research pass (Exa/Firecrawl via `web-scrape`, 2026-07-29)
+grounded `project-evolve`'s process in real methodology rather than a guess: look at real
+usage before guessing, match review depth to how much usage exists, only act on
+importance+dissatisfaction gaps, capture friction as it happens, keep output short. Applied
+to Tyler's own two live projects (Habit Tracker, Gold Trading Dashboard), it surfaced real
+"never verified since launch" items sitting in their own docs — confirming the docs-first
+step earns its place in the process.
+
+**Alternatives considered:** Folding iteration into `project-builder` directly as a second
+mode with its own interview, instead of a separate skill — rejected per Tyler's earlier
+preference to split by task shape rather than pile more onto one skill
+([[feedback_skill_bloat_split]] in memory). Naming it `project-iterate` — rejected by Tyler,
+renamed to `project-evolve`.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-29 — Project docs update live, not after the fact
+
+**Decision:** `debug`, `project-builder`, and `project-evolve` were all edited so that
+whenever a project's own docs (`CLAUDE.md`, `docs/status.md`, `docs/how-it-works.md`)
+describe something as broken, unverified, or a placeholder, and that gets confirmed
+working/fixed during a live session, the doc gets updated right then — not left stale for
+a later session to catch.
+
+**Why:** caught during the first real `project-evolve` run against Habit Tracker —
+`docs/how-it-works.md` still said Google sign-in was "not yet verified end-to-end" a full
+session after Tyler had already confirmed it working live on his phone (2026-07-28). The
+fix had only landed in AIOS-level memory, never in the project's own paper trail — which
+`project-evolve`'s own Phase 1 relies on being current. Also captured as a standing
+preference in memory ([[feedback_update_project_docs_live]]), since it's a general rule,
+not just a fix to these three skills.
+
+**Alternatives considered:** Leaving it to `project-evolve`'s Phase 1 docs-scan to catch
+stale entries after the fact — rejected, since that just repeats the same lag one skill run
+later instead of closing the loop when the fact is actually learned.
+
+**Owner:** Tyler

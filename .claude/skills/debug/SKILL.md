@@ -77,6 +77,14 @@ Re-run the exact original failing case for real — not a re-read of the code, a
 execution — and confirm it now succeeds. Check the fix didn't break anything adjacent it
 plausibly could have touched.
 
+**If the project has its own docs** (`CLAUDE.md`, `docs/status.md`,
+`docs/how-it-works.md`, etc.) that describe this as broken or unverified, update that doc
+right now, in this same session — don't leave a stale "not verified" note sitting there
+for a future session to trip over. (2026-07-29: a habit-tracker doc still said Google
+sign-in was "not yet verified" a full session after Tyler had already confirmed it live —
+the fix never got written back into the project's own paper trail, only into AIOS-level
+memory.)
+
 ### Phase 6 — Report
 Short report: what broke, what the actual root cause was (not just "fixed it"), what
 changed, and whether this points at a deeper pattern worth flagging (e.g. "this is the

@@ -7,6 +7,12 @@ After each batch, give a short "why" note (1-2 plain sentences) so Tyler learns 
 Do not skip a question. If Tyler answers short, that's fine — capture it and move on.
 These 10 answers become the top of the spec doc ("The Big Picture").
 
+**Exception — Questions 2, 3, and 6 (why / goal / what "done" looks like) are
+non-negotiable.** These three have to end up genuinely clear, not just answered. If Tyler's
+answer is vague or he doesn't actually know yet, don't capture it and move on like the other
+7 — work through it with him right there, on the spot, until each of these three is clear.
+Every other question in the list can take a short answer and move on as usual.
+
 ---
 
 ## The list
@@ -38,6 +44,8 @@ Paint the picture of the simplest version you'd be proud to show someone.
 **7. What are the must-haves vs the nice-to-haves?**
 Two short lists. Must = v1 breaks without it. Nice = later.
 *Why we ask: this is how we ship fast — build the must-haves, park the rest.*
+**Hard cap: the must-have list tops out at 3 core features for v1** (a ceiling, not a
+target — 1 or 2 is fine). Anything past that goes on the nice-to-haves list, no exceptions.
 
 **8. What's the smallest version you'd actually use yourself?**
 Strip it down. What's the tiny core that's still useful?

@@ -1,6 +1,6 @@
 ---
 name: project-builder
-description: Use when Tyler wants to actually execute a finished project-planner spec/build checklist into real, working output — an app, skill, script, dashboard, or automation. Trigger on "let's build [project]," "build the [project] plan," "time to build X," or "execute the checklist for X." Never auto-invoked right after project-planner finishes — building is always a separate, explicit decision from planning.
+description: Use when Tyler wants to actually execute a finished spec into real, working output — either a fresh project-planner build-checklist (first build) or a project-evolve change-spec (a scoped change to something already live). Trigger on "let's build [project]," "build the [project] plan," "time to build X," "execute the checklist for X," or "let's make that change to [project]." Never auto-invoked right after project-planner or project-evolve finishes — building is always a separate, explicit decision from planning.
 argument-hint: [project name or path to its spec/checklist]
 ---
 
@@ -21,13 +21,26 @@ Confirm which finished spec/checklist is being built (a path, or infer from what
 named). If no finished plan exists yet, say so and point to `project-planner` instead —
 this skill has nothing to execute without one.
 
+**Determine the build mode from the spec itself — never ask Tyler which mode this is:**
+- **Fresh build** — the spec is `project-planner`'s `docs/build-checklist.md` (or
+  equivalent first-time spec). Nothing real is live yet; aim straight at a working v1.
+- **Evolve build** — the spec is a `project-evolve` entry from that project's
+  `docs/change-log.md`. Something is already live, real, and in use — every phase below
+  runs with more care because there's existing behavior and possibly existing data that
+  must not break.
+If it's genuinely unclear which one a given spec is (unlabeled file, ambiguous request),
+ask — don't guess.
+
 ## Phase 1 — Discovery
 
 1. **Read the whole spec/checklist** before writing anything — every section, not just the
    build order.
 2. **Survey the real environment** the build touches: check the *current real state* of
    whatever the build operates on (existing data, existing files, existing config) — don't
-   design against the spec's assumptions alone. **Don't go looking for another existing
+   design against the spec's assumptions alone. **Evolve build:** this survey has one extra
+   job — establish a baseline of what currently works, including the parts the change-spec
+   isn't touching. That baseline is what Phase 6 checks against; without it there's nothing
+   to confirm you didn't break. **Don't go looking for another existing
    project to use as a structural template**, and don't offer one either ("want me to
    structure it like X?") — build directly for what this project actually needs. If a
    genuinely relevant naming/structure convention is already obvious from context (not
@@ -136,10 +149,25 @@ Invoke the built thing for real, end-to-end — not just a re-read of its own in
 Confirm guardrails and hard rules hold against real edge cases (a missing file, a weak
 match, an ambiguous case) rather than only the happy path.
 
+**Evolve build:** also re-check the Phase 1 baseline — the parts of the project the
+change-spec wasn't touching. "Done" for an evolve build means the change works AND nothing
+that worked before got broken, not just the new thing in isolation.
+
+**Whichever mode:** if this test confirms something the project's own docs currently list
+as "not yet verified" or a placeholder, update that doc right now to say so — don't let
+Phase 7's report be the only record. The project's own docs are what a future
+`project-evolve` pass reads in its Phase 1; a stale doc undermines that.
+
 ## Phase 7 — Report + reflect
 
 1. Give a concise final summary tied back to the spec's own "done and working" bar — what's
-   built, what's tested, what's deliberately deferred and why.
+   built, what's tested, what's deliberately deferred and why. **State the actual git/deploy
+   status explicitly** — committed? pushed? live at a real URL, or still local-only? Never
+   leave Tyler to ask "so is this actually live?" separately; a finished build isn't done
+   until this is said plainly, even if the honest answer is "nothing's pushed yet." (Caught
+   2026-07-29 on the habit-tracker evolve build — the final report covered what was built
+   and tested but never mentioned the code was still sitting uncommitted, and Tyler had to
+   ask directly.)
 2. Offer one or two ideas for how the finished thing could be even better — same spirit as
    the Phase 3 check-ins, but for the whole build now that it's done.
 3. Separately, **only if this build hit something the current Builder process didn't

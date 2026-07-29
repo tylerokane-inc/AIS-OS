@@ -215,6 +215,7 @@ Remind Tyler the build itself happens in Claude Code, pointed at `docs/spec.md` 
   project note/folder once that's where docs are routing. Never mix two projects in one
   folder or note. This repo holds skills and operating info, not project docs.
 - Default to shipping the smallest useful version; write bigger ideas into the "nice-to-haves" list. **Except Claude Code skill/internal automation builds — those ship complete, see the "Ship v1 fast" exception above.**
+- **First build caps out at 3 core features, max** (apps/dashboards/plugins/connectors — same skill exception as above). A hard ceiling on the must-have list, not a target to hit. See `references/core-questions.md` Q7.
 - **Prioritize free APIs/connections; verify before locking one in.** When a project needs
   an outside service, default to genuinely free options over paid ones — cheap only if
   nothing free covers the need. Never take a provider's "free tier" claim at face value:
