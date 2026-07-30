@@ -40,6 +40,12 @@ certificate's issuer if it's TLS-shaped (`openssl s_client -connect host:443 | o
 `SSLCertVerificationError` on the gold-trading-dashboard build turned out to be Norton
 Antivirus's HTTPS-scanning feature — see `project-builder`'s Guardrails section.)
 
+**When the failure spans multiple components** (CI → build → signing, API → service →
+database), don't guess which layer broke it — add a diagnostic log at every component
+boundary (what data enters, what exits, whether config/env actually propagated) and run it
+once to see exactly where it breaks, before investigating that specific layer. Cheaper than
+debugging blind across a boundary that hasn't been confirmed yet.
+
 **If the search space is large, cut it in half instead of scanning start to end** — which
 half of the code/timeline/input still shows the failure? Discard the other half and repeat
 (`git bisect` automates exactly this over commit history when "it used to work" is the
@@ -71,6 +77,10 @@ Fix the actual root cause, not the nearest symptom. Keep the fix scoped to the b
 isn't the moment for a surrounding refactor or cleanup, even if something adjacent looks
 messy. If the real fix turns out bigger than the bug itself (it reveals a structural
 problem), say so explicitly and ask before expanding scope.
+
+**If three fix attempts in a row don't resolve it, stop patching.** Don't try a fourth
+variation — step back and question whether the diagnosed root cause is even right. Say so
+to Tyler plainly and reconsider the approach rather than continuing to iterate blindly.
 
 ### Phase 5 — Verify
 Re-run the exact original failing case for real — not a re-read of the code, an actual
@@ -115,3 +125,9 @@ reasoning before touching a debugger (Rob Pike, on Ken Thompson), the 10-minute 
 (MIT 6.031), rubber duck debugging (Hunt & Thomas, *The Pragmatic Programmer*). Researched
 2026-07-27 via the `web-scrape` skill — picked for being genuinely distinct from each other
 and from the phases above, not restating the same steps in different words.
+
+Multi-component diagnostic instrumentation and the 3-failed-fixes escalation rule (both
+added 2026-07-29) are adapted from the `systematic-debugging` skill in Jesse Vincent's
+`obra/superpowers` plugin — reviewed for quality and pulled in directly rather than
+installing the whole framework, since the rest of it overlaps with skills this repo already
+has (see `decisions/log.md`).

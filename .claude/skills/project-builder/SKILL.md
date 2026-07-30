@@ -105,6 +105,32 @@ follow `skill-builder`'s Build Phase conventions (frontmatter, structure, `CLAUD
   the builder does on its own; it's not a step Tyler has to manage. Matches the AIOS's own
   token-efficiency priority.
 
+## Phase 3.5 — Review
+
+Once every component in this build is done, dispatch **one** fresh subagent (the `Agent`
+tool) to review the whole thing — hand it the full spec/checklist plus a concrete diff of
+everything this build changed (a real diff file or `git diff`, not a request to re-derive
+context from scratch). It returns two separate verdicts: **spec compliance** (does the
+finished result match what was asked, requirement by requirement) and **quality** (bugs,
+security issues per CLAUDE.md's OWASP note, unnecessary complexity) — neither verdict
+substitutes for the other.
+
+Runs the same way on every build, Crucial or Simpler alike. Crucial builds keep their
+existing per-artifact pauses with Tyler on top of this — this doesn't replace those. For
+Simpler builds, which currently get no pause at all, this is the first real quality gate
+they get.
+
+If it finds real issues, fix them directly, then send the reviewer a scoped re-check on
+just those findings — not a full re-review. **Bounded to 3 rounds.** Still failing after
+that, stop patching and bring it to Tyler directly with what was tried — never a silent 4th
+attempt (same escalation philosophy as `debug`'s Phase 4).
+
+Fold the outcome into one line in Phase 7's report — the reviewer's own back-and-forth
+stays off Tyler's screen, e.g. "Auto-review found 2 issues, fixed, reverified clean."
+Adapted from the `subagent-driven-development` skill in Jesse Vincent's `obra/superpowers`
+plugin, scaled down from its full team-CI version (no git worktrees, no ledger file, no
+per-task loop) to fit a single-builder, whole-build pass.
+
 ## Phase 4 — Wire up
 
 1. **Document each new artifact** wherever it needs to be indexed — `CLAUDE.md` for a new

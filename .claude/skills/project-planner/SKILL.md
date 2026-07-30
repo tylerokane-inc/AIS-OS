@@ -57,6 +57,15 @@ it can change.
 idea back in plain English, explain which type fits and why, and recommend one. Not knowing
 the type is exactly the kind of thing this planner is here to solve.
 
+### Step 1.5 — Is this actually one project?
+Before spending the 10 core questions on it, check whether the idea genuinely bundles
+multiple independent subsystems (e.g. "a platform with chat, billing, and analytics" — each
+piece could ship and be useful on its own). If so, say so plainly and suggest planning the
+first, most important piece through this full flow now, parking the rest as separate future
+planning passes — don't spend the interview refining details of a project that actually
+needs to be split first. Most ideas aren't this — skip silently past this step when the
+idea is already one coherent thing.
+
 ### Step 2 — The 10 core questions
 Open `references/core-questions.md` and ask all 10, in medium batches, with why-notes.
 When done, play back a 3-4 sentence "Big Picture" summary and let Tyler confirm or fix it.
@@ -96,7 +105,10 @@ doesn't want the detour.
 ### Step 3 — Branch questions
 Open `references/branch-questions.md`, pick the set that matches the build type, and ask it
 — folding in Step 2.5's research where relevant. (If the project is a mix, run more than one
-set.) Summarize "How It's Built" back to him.
+set.) **When a branch question is a genuine technical/architecture choice** (not just a
+preference), present 2-3 concrete approaches with real tradeoffs and your own
+recommendation — the same pattern Step 2.5 already uses for feature research — instead of
+leaving it as a blank open question. Summarize "How It's Built" back to him.
 
 ### Step 3.5 — Keep going, or call it enough?
 Don't assume the interview is done just because the fixed lists ran out. The 10 core +

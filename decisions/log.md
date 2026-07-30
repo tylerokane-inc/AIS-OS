@@ -990,3 +990,104 @@ stale entries after the fact — rejected, since that just repeats the same lag 
 later instead of closing the loop when the fact is actually learned.
 
 **Owner:** Tyler
+
+---
+
+## 2026-07-29 — Kept front-load-and-drive over per-step approval; added Environment, Verify, Cite-sources, and No-jargon-names rules to CLAUDE.md
+
+**Decision:** Ran `/insights` (a usage report analyzing recent Claude Code sessions) and
+worked through its six proposed CLAUDE.md additions one at a time instead of pasting them
+in wholesale. Result:
+
+1. **Execute-vs-approve tension resolved: kept the status quo.** The report's top friction
+   finding suggested requiring Tyler's approval before any multi-file rewrite/rename. That
+   directly conflicts with the existing CLAUDE.md rule (2026-07-24 entry, "plain English,
+   skimmable, and repo-aware") to front-load a complete plan and drive it through without
+   checkpointing every step. Asked Tyler directly which should win — he chose to keep
+   front-load-and-drive as-is. No CLAUDE.md change for this one.
+2. **Added a new `## Environment` section** near the top of CLAUDE.md: Tyler's machine is
+   Windows/PowerShell; Claude's own tool environment is sandboxed and is *not* that machine
+   — never infer running processes/ports/PATH from Claude's own shell.
+3. **Added three bullets to "How you work with me":** verify your own work before reporting
+   done (build/URL/git status/typecheck/lint, not manual steps handed back to Tyler); cite
+   sources (prefer official vendor docs over blogs) for capability/version claims; don't
+   invent jargon-y names for anything Claude creates.
+4. **Skipped two of the six proposed additions as duplicates**, not silently — both were
+   already covered and adding them verbatim would have created redundant/conflicting
+   instructions in a file that loads every session:
+   - "Explain at Beginner Level" mostly restated the existing "Plain English, always" and
+     "Full step-by-step, every time" bullets (2026-07-24 entry). Only genuinely new part
+     (don't invent jargon-y names) was kept as its own bullet above.
+   - "Never Ingest / ClickUp Paused" duplicated what's already enforced via memory
+     (`feedback_no_auto_ingest.md`, `project_clickup_rescope.md` — see the 2026-07-27
+     "ClickUp pushes paused" entry above), which loads every session the same way CLAUDE.md
+     does. ClickUp's pause is also a temporary project state, not a permanent rule — better
+     kept in memory where it's easy to lift later than baked into CLAUDE.md.
+   - "Research Standards" (the fourth kept item, #3 above) was generalized rather than
+     added as originally worded — the original hardcoded 4 vendor domains
+     (`docs.anthropic.com`, `expo.dev`, `supabase.com`, `developer.mozilla.org`), which
+     would go stale as new tools/stacks get added; kept as a principle instead.
+
+**Why:** `/improve-system`'s one rule is to always check for existing/conflicting coverage
+before writing, not just apply what's proposed. The `/insights` report is a good friction
+signal (it's mining real session history) but its suggestions are generic pattern-matches
+against friction data, not aware of what's already codified in this specific repo — several
+of the six either fought or duplicated standing rules. Working through each one individually
+caught that instead of bloating CLAUDE.md with contradictions on the same page.
+
+**Alternatives considered:** Applying all six additions verbatim as proposed — rejected,
+would have shipped a direct self-contradiction (execute-before-approval vs.
+front-load-and-drive) into the file every session loads, plus two blocks of duplicate
+instructions. Silently dropping the duplicates without telling Tyler — rejected; per this
+skill's own rule, every proposed change (including "skip this one, here's why") gets shown
+before/instead of being written.
+
+**Owner:** Tyler
+
+---
+
+## 2026-07-29 — Evaluated the Superpowers plugin; pulled 6 specific ideas into existing skills instead of installing it
+
+**Decision:** Tyler found the "Superpowers" Claude Code plugin (`obra/superpowers`, made by
+Jesse Vincent — 987k installs, MIT-licensed, actively maintained, not Anthropic-verified but
+no red flags found on inspection) and wanted to know whether to install it globally, and
+whether its debugging skill made the AIOS's own `debug` skill redundant.
+
+Read `debug`, `project-planner`, and `project-builder` side-by-side against Superpowers'
+`systematic-debugging`, `brainstorming`, and `subagent-driven-development` skills. Verdict:
+**don't install the plugin** — its brainstorming and subagent-driven-development pieces
+overlap with what `project-planner` and `project-builder` already do, and installing it
+would create two systems matching similar trigger phrases with no clear priority between
+them. Instead, cherry-picked 6 genuinely new ideas directly into the existing skills:
+
+- **`debug`:** multi-component diagnostic instrumentation (log every boundary in a
+  multi-layer bug before guessing which layer broke) + a 3-failed-fixes escalation rule
+  (stop patching and question the diagnosed cause, don't try a silent 4th variation).
+- **`project-planner`:** a new Step 1.5 that checks whether an idea actually bundles
+  multiple independent subsystems before spending the interview on it + presenting 2-3
+  concrete approaches with tradeoffs (not just an open question) for genuine
+  architecture/technical decisions in Step 3.
+- **`project-builder`:** a new Phase 3.5 — one independent reviewer subagent pass at the
+  end of every build (spec-compliance + quality, two separate verdicts), with the same
+  3-round-then-escalate bound as `debug`'s fix loop. Runs the same way on Crucial and
+  Simpler builds alike; deliberately left out Superpowers' full team-CI machinery (git
+  worktree per task, a persistent ledger file, 5-round loops) as overkill for a solo
+  builder.
+
+Explicitly rejected pulling in Superpowers' "ask one question at a time" brainstorming
+method — it's the opposite of Tyler's standing preference to batch questions into one
+response.
+
+**Why:** Same principle `/improve-system` already runs on for CLAUDE.md — check for
+existing/overlapping coverage before adding something wholesale. A popular, legitimate
+plugin can still be the wrong call if most of what it does already exists in a form
+tailored to how Tyler actually works, and installing it anyway just adds ambiguity about
+which system handles a given trigger phrase.
+
+**Alternatives considered:** Installing Superpowers globally — rejected, redundant with
+`project-planner`/`project-builder` and adds an opinionated TDD-enforcement layer Tyler
+didn't ask for. Keeping `debug` as-is and ignoring Superpowers entirely — rejected, its
+multi-component instrumentation technique and escalation rule were genuinely new and worth
+having regardless of the install decision.
+
+**Owner:** Tyler
